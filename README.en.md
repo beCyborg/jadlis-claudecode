@@ -14,6 +14,11 @@ claude plugin install jadlis-claudecode@jadlis
 This is the first and mandatory step of the Jadlis route: every other plugin assumes the
 workbench is already there.
 
+![Dependencies, agent settings, terminal and folder come together into one workbench](docs/img/hero-jadlis-claudecode.webp)
+
+In words: on the left four pieces — dependencies, agent settings, terminal and project folder —
+on the right the assembled workbench, and a second run rewrites nothing in it.
+
 This is my workbench published as it is, not a product: whatever I stopped using, I removed.
 
 ## Before → after
@@ -27,6 +32,16 @@ This is my workbench published as it is, not a product: whatever I stopped using
 | **Running it a second time.** It appends a second identical block to `.zshrc`. | It suggests "just add it at the end" and multiplies copies. | The block lives between markers and is replaced in place; all five scripts are idempotent — a second run prints `UNCHANGED` and writes not a byte. |
 
 ## How it works
+
+![The probe, the missing packages, terminal and folder, agent settings, the probe again](docs/img/how-jadlis-claudecode.webp)
+
+Going in — a Mac that already has Claude Code on it.
+Inside — the probe prints PASS/FAIL, only what is FAIL gets installed, and every overwrite
+is preceded by a question.
+Coming out — the assembled workbench and the list of what changed.
+
+In words: probe → missing packages → terminal → folder → `~/.claude` → the probe again →
+next step.
 
 Eight steps. Each one first explains in plain language what it is and why, and only then
 acts. Before an install and before any overwrite — a question.
@@ -50,8 +65,6 @@ acts. Before an install and before any overwrite — a question.
    opens the right tab.
 8. **The wrap-up.** The probe again, the list of changes and the next step: a new iTerm2
    tab → `cld` → `/jadlis-hub`.
-
-In words: probe → missing packages → terminal → folder → `~/.claude` → check → next step.
 
 The mechanical part sits in five small scripts — `probe.sh`, `apply-settings.sh`,
 `apply-shell.sh`, `apply-iterm.sh`, `apply-claude-home.sh`. Each takes `--plan` (show the
@@ -139,9 +152,9 @@ the work is a handful of commands and reading their output. What makes the workb
 expensive is not the install but what it switches on: `opus[1m]` and `effortLevel: high`
 spend the weekly quota noticeably faster than the defaults.
 
-**Verified where I work:** my Mac (Apple Silicon, macOS 27), my Max subscription. Where
-else this works — [уточнить]; on an Intel Mac the Homebrew path differs (`/usr/local`),
-and that is the only known difference.
+**Verified where I work:** my Mac (Apple Silicon, macOS 27), my Max subscription. macOS only:
+on an Intel Mac the Homebrew path differs (`/usr/local`) — the only known difference, and one
+I have not tested myself.
 
 **Terms of use.** There is no license: all rights reserved by the author. You may read it
 and use it personally. Commercial use, republishing and bundling it into your own
