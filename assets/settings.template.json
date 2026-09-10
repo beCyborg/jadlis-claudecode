@@ -1,0 +1,202 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "cleanupPeriodDays": 90,
+  "skillListingMaxDescChars": 600,
+  "skillListingBudgetFraction": 0.01,
+  "env": {
+    "ENABLE_CLAUDEAI_MCP_SERVERS": "false",
+    "AGENT_BROWSER_CONTENT_BOUNDARIES": "1",
+    "AGENT_BROWSER_MAX_OUTPUT": "50000",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "claude-opus-5[1m]",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-opus-5[1m]",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-opus-5[1m]",
+    "CLAUDE_CODE_MAX_OUTPUT_TOKENS": "128000",
+    "CLAUDE_CODE_FILE_READ_MAX_OUTPUT_TOKENS": "100000",
+    "MAX_MCP_OUTPUT_TOKENS": "100000",
+    "CLAUDE_CODE_SUBAGENT_MODEL": "claude-opus-5[1m]",
+    "CLAUDE_CODE_NEW_INIT": "true",
+    "CLAUDE_REMOTE_CONTROL_SESSION_NAME_PREFIX": "MBP",
+    "DISABLE_ERROR_REPORTING": "1",
+    "DISABLE_FEEDBACK_COMMAND": "1",
+    "DISABLE_AUTOUPDATER": "1",
+    "FORCE_AUTOUPDATE_PLUGINS": "1"
+  },
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
+  },
+  "permissions": {
+    "allow": [
+      "Bash(node *)",
+      "Bash(npx *)",
+      "Bash(bun *)",
+      "Bash(python3 *)",
+      "Bash(perl -ne *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git status *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git branch *)",
+      "Bash(git checkout *)",
+      "Bash(git push origin *)",
+      "Bash(git rm *)",
+      "Bash(git remote *)",
+      "Bash(gh *)",
+      "Bash(ls *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(fd *)",
+      "Bash(wc *)",
+      "Bash(du *)",
+      "Bash(mkdir *)",
+      "Bash(chmod *)",
+      "Bash(echo *)",
+      "Bash(printf *)",
+      "Bash(xargs *)",
+      "Bash(xxd *)",
+      "Bash(agent-browser *)",
+      "Bash(bats *)",
+      "Bash(yt-dlp *)",
+      "Bash(brew list *)",
+      "Bash(brew search *)",
+      "Bash(jq *)",
+      "Bash(bash *)",
+      "Bash(cd *)",
+      "Bash(test *)",
+      "Bash(cat *)",
+      "Bash(head *)",
+      "Bash(tail *)",
+      "Bash(sort *)",
+      "Bash(stat *)",
+      "Bash(curl *)",
+      "Edit(*)",
+      "Read(*)",
+      "Skill(*)",
+      "mcp__plugin_github_github__*",
+      "mcp__plugin_jadlis-browser_playwright__*",
+      "mcp__computer-use"
+    ],
+    "deny": [
+      "WebSearch",
+      "WebFetch",
+      "Agent(claude-code-guide)",
+      "mcp__firecrawl__firecrawl_search",
+      "mcp__firecrawl__firecrawl_search_feedback",
+      "mcp__firecrawl__firecrawl_feedback",
+      "mcp__firecrawl__firecrawl_developer_search"
+    ],
+    "defaultMode": "bypassPermissions"
+  },
+  "model": "opus[1m]",
+  "fallbackModel": [
+    "claude-opus-5[1m]"
+  ],
+  "skillOverrides": {
+    "keybindings-help": "user-invocable-only",
+    "fewer-permission-prompts": "user-invocable-only",
+    "run": "user-invocable-only",
+    "init": "user-invocable-only",
+    "security-review": "user-invocable-only",
+    "simplify": "user-invocable-only"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/session-start-title.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/rename-topic-from-prompt.sh",
+            "timeout": 20
+          }
+        ]
+      }
+    ]
+  },
+  "disableAgentView": false,
+  "disableRemoteControl": false,
+  "bashOutputMaxChars": 128000,
+  "taskOutputMaxChars": 128000,
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
+  "outputStyle": "Jadlis",
+  "viewMode": "default",
+  "language": "Russian",
+  "spinnerTipsEnabled": false,
+  "spinnerVerbs": {
+    "mode": "replace",
+    "verbs": [
+      "Варю",
+      "Завариваю",
+      "Колдую",
+      "Мастерю",
+      "Кую",
+      "Плету",
+      "Мудрю",
+      "Кумекаю",
+      "Кручу",
+      "Укрощаю",
+      "Дирижирую",
+      "Сочиняю",
+      "Проектирую",
+      "Призываю",
+      "Шаманю",
+      "Синтезирую",
+      "Стряпаю",
+      "Считаю",
+      "Черчу",
+      "Замышляю",
+      "Перемалываю",
+      "Обрабатываю",
+      "Рождаю",
+      "Строю",
+      "Гитифицирую"
+    ]
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "high"
+    },
+    "claude-opus-5": {
+      "effortLevel": "high"
+    }
+  },
+  "showClearContextOnPlanAccept": true,
+  "askUserQuestionTimeout": "never",
+  "tui": "fullscreen",
+  "voice": {
+    "enabled": false
+  },
+  "timeFormat": "24-hour",
+  "autoMemoryEnabled": true,
+  "autoMemoryDirectory": "~/.claude/memory",
+  "showThinkingSummaries": true,
+  "skipDangerousModePermissionPrompt": true,
+  "skipWorkflowUsageWarning": true,
+  "theme": "auto",
+  "preferredNotifChannel": "notifications_disabled",
+  "autoCompactEnabled": true,
+  "switchModelsOnFlag": true,
+  "autoScrollEnabled": true,
+  "teammateMode": "tmux",
+  "remoteControlAtStartup": true,
+  "inputNeededNotifEnabled": true,
+  "agentPushNotifEnabled": true
+}
