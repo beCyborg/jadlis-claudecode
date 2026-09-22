@@ -151,8 +151,12 @@ no more than once every six hours. It is the only updater.
 
 **How tokens get spent.** A run is light: there are no subagents and no fan-outs here,
 the work is a handful of commands and reading their output. What makes the workbench
-expensive is not the install but what it switches on: `claude-opus-5-5` at effort `xhigh`
-(`modelSettings`) spends the weekly quota noticeably faster than the defaults.
+expensive is not the install but what it switches on: the main model is `claude-opus-5-5`,
+at effort `high` in `modelSettings`. `xhigh` is not set for the whole session: it is set
+per agent, in the agent's own settings, and only single agents at the end of a chain get
+it — analysis and synthesis, validators, critics — plus the browser and desktop operators.
+There the extra depth pays off; on code and in mass subagents `xhigh` only spends the
+weekly quota faster.
 
 **Verified where I work:** my Mac (Apple Silicon, macOS 27), my Max subscription. macOS only:
 on an Intel Mac the Homebrew path differs (`/usr/local`) — the only known difference, and one
