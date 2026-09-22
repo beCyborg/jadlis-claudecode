@@ -2,6 +2,30 @@
 
 Формат: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии — [SemVer](https://semver.org/lang/ru/).
 
+## [1.0.2] — 2026-09-22 — Opus 5.5 на effort high / Opus 5.5 at effort high
+
+### Для человека
+- Шаблон настроек ставит Opus 5.5 на effort `high` вместо `xhigh`: по разбору Opus 5.5 от
+  22.09.2026 `xhigh` окупается только у одиночных агентов в конце цепочки, а на коде и в
+  массовых субагентах лишь быстрее расходует недельную квоту.
+- `xhigh` остаётся точечно, в настройках самого агента: анализ и синтез, валидаторы,
+  критики, операторы браузера и рабочего стола.
+
+### For agents
+- Changed: `assets/settings.template.json` — `modelSettings.claude-opus-5-5.effortLevel`
+  `xhigh` → `high` (top-level `effortLevel: high` and the `claude-fable-5-1` /
+  `claude-opus-5` entries unchanged).
+- Changed: `README.md`, `README.en.md` (token-spend paragraph),
+  `skills/claudecode/references/settings.md` (`modelSettings` row) — Opus 5.5 default is
+  `high`; `xhigh` only for single end-of-chain agents (analysis/synthesis, validators,
+  critics) and the browser/desktop operators, set per agent, not per session; the settings
+  row also says how to raise effort for one session (`s` in the `/effort` slider) without
+  saving it as the default.
+- Changed: `.claude-plugin/plugin.json` — `version` 1.0.1 → 1.0.2.
+- Migration: existing installs keep `xhigh` until `/claudecode` is re-run —
+  `apply-settings.sh` deep-merges the template over `settings.json`, so the re-run sets
+  `modelSettings.claude-opus-5-5.effortLevel` to `high`.
+
 ## [1.0.1] — 2026-09-22 — Переход на Opus 5.5 / Switch to Opus 5.5
 
 ### Для человека
