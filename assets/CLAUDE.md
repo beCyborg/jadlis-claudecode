@@ -13,8 +13,8 @@ Section size ∝ change size; a small fix needs Context + Evidence + Verificatio
 Canon — ~/.claude/rules/routing.md (always loaded). Unsure which tool → invoke the matching skill (/github, /browser, /search).
 
 ## Subagents, Workflow, deep-research
-Standing request: use subagents, the Workflow tool and deep-research wherever a skill or an accepted plan provides for them; no per-launch permission needed. Why: Claude Code's Opus 5 delegation instruction requires an explicit user request (CC 2.1.245, anthropics/claude-code#80988) — this is that request.
-Bulk edits and generation (many files, note batches, memory packing) go to Opus 5 subagents; Fable plans, reviews and decides. Why: on the Max plan Fable burns ~2× the window of Opus and is capped at 50% of the weekly quota.
+Standing request: use subagents, the Workflow tool and deep-research wherever a skill or an accepted plan provides for them; no per-launch permission needed. Why: Claude Code's Opus delegation instruction requires an explicit user request (CC 2.1.245+, anthropics/claude-code#80988) — this is that request.
+Bulk edits and generation (many files, note batches, memory packing) go to Opus 5.5 subagents; Fable plans, reviews and decides. Why: on the Max plan Fable burns ~2× the window of Opus and is capped at 50% of the weekly quota.
 This standing request does not go into leaf agents (advisor-*, researcher-*, orchestrator-*): they must not spawn nested agents. An orchestrator subagent that should fan out needs it asked for explicitly in its task prompt.
 In plan mode subagents are read-only: ask them for inline reports, or launch them before EnterPlanMode. Why: plan-mode agents cannot write files (2026-09-05). Agents launched before a plan interrupt keep running and writing files — before re-running a plan step check `ListAgents` and `ls -la` the target workDir, and give duplicates different output filenames.
 Recon agents fabricate CLI/model/version facts — run the command yourself before recording them.

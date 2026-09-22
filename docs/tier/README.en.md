@@ -26,7 +26,7 @@ What `/claudecode` shows before writing settings:
 ```diff
 --- current ~/.claude/settings.json
 +++ after merge
-+  "model": "opus[1m]",
++  "model": "claude-opus-5-5",
 +  "language": "Russian",
 +  "outputStyle": "Jadlis",
 +  "effortLevel": "high",
@@ -41,14 +41,15 @@ Apply? A backup stays next to it: settings.json.bak-20260910-181500
 Three steps before the plugin, then one command.
 
 1. **A Claude subscription.** You need the **Max** plan: the settings template sets
-   `model: "opus[1m]"` — Opus with a 1M-token window — and on Pro that model burns usage
-   credits. Terms and pricing live on claude.ai.
+   `model: "claude-opus-5-5"` — Opus 5.5, with a 1M-token window by default — and on Pro
+   that model burns usage credits. Terms and pricing live on claude.ai.
 2. **The Claude Code desktop app.** Download it from the
    [install page](https://code.claude.com/docs/en/desktop-quickstart), sign in, open the
    **Code** tab and pick a folder.
 3. **The `claude` CLI.** The app does **not** install it — and `claude plugin …`
    commands need it. `/claudecode` installs it itself, or do it by hand:
-   `curl -fsSL https://claude.ai/install.sh | bash`.
+   `curl -fsSL https://claude.ai/install.sh | bash`. You need version 2.1.280 or newer — the
+   first one with the `claude-opus-5-5` model.
 
 Then paste this block into Claude Code as is:
 

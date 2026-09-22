@@ -25,7 +25,7 @@
 ```diff
 --- текущий ~/.claude/settings.json
 +++ после слияния
-+  "model": "opus[1m]",
++  "model": "claude-opus-5-5",
 +  "language": "Russian",
 +  "outputStyle": "Jadlis",
 +  "effortLevel": "high",
@@ -39,15 +39,16 @@
 
 Три шага перед плагином, потом одна команда.
 
-1. **Подписка Claude.** Нужен план **Max**: шаблон настроек ставит `model: "opus[1m]"` —
-   Opus с окном на 1M токенов, а на Pro такая модель списывает usage-кредиты. Условия и
-   цены — на claude.ai.
+1. **Подписка Claude.** Нужен план **Max**: шаблон настроек ставит
+   `model: "claude-opus-5-5"` — Opus 5.5 с окном на 1M токенов по умолчанию, а на Pro такая
+   модель списывает usage-кредиты. Условия и цены — на claude.ai.
 2. **Десктопное приложение Claude Code.** Скачай с
    [страницы установки](https://code.claude.com/docs/en/desktop-quickstart), запусти,
    войди в аккаунт, открой вкладку **Code** и выбери папку.
 3. **CLI `claude`.** Приложение его **не ставит** — а команды `claude plugin …` нужны
    для плагинов. Поставит сам `/claudecode`; либо руками:
-   `curl -fsSL https://claude.ai/install.sh | bash`.
+   `curl -fsSL https://claude.ai/install.sh | bash`. Нужна версия 2.1.280 или новее — в ней
+   появилась модель `claude-opus-5-5`.
 
 Дальше вставь этот блок в Claude Code целиком:
 

@@ -137,8 +137,10 @@ flag. It does not create `~/Jadlis/CLAUDE.md` or the note structure — that is
 
 **What you need.** macOS: the iTerm2 profile, `defaults`, Homebrew and
 `~/Library/Application Support` are all Mac things, so the plugin does not work on Linux
-or Windows. A Claude **Max** plan: the template sets `model: "opus[1m]"`, and on Pro that
-model burns usage credits. Readiness for `permissions.defaultMode: "bypassPermissions"` —
+or Windows. A Claude **Max** plan: the template sets `model: "claude-opus-5-5"` (Opus 5.5,
+a 1M-token window by default), and on Pro that model burns usage credits. Claude Code
+2.1.280 or newer: earlier versions do not know this model. Readiness for
+`permissions.defaultMode: "bypassPermissions"` —
 the agent runs commands and edits files without asking every time; the value is visible
 in the diff before the write and can be changed. Everything that gets installed is free:
 Homebrew, the CLI tools, iTerm2, the font, tmux.
@@ -149,8 +151,8 @@ no more than once every six hours. It is the only updater.
 
 **How tokens get spent.** A run is light: there are no subagents and no fan-outs here,
 the work is a handful of commands and reading their output. What makes the workbench
-expensive is not the install but what it switches on: `opus[1m]` and `effortLevel: high`
-spend the weekly quota noticeably faster than the defaults.
+expensive is not the install but what it switches on: `claude-opus-5-5` at effort `xhigh`
+(`modelSettings`) spends the weekly quota noticeably faster than the defaults.
 
 **Verified where I work:** my Mac (Apple Silicon, macOS 27), my Max subscription. macOS only:
 on an Intel Mac the Homebrew path differs (`/usr/local`) — the only known difference, and one
