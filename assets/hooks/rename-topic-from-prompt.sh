@@ -18,9 +18,9 @@
 #     Хук ставит только мгновенные имена slash-ритуалов (мэппинг ниже) и —
 #     с 2026-09-10 — headless-имена для промптов с файлом / в план-моде (слой 1).
 #   * headless: `claude -p` на подписке (OAuth), литеральный id модели
-#     (алиасы haiku/sonnet ремапятся env-ом в claude-opus-5[1m]), без settings,
+#     (алиасы haiku/sonnet ремапятся env-ом в claude-opus-5-5), без settings,
 #     MCP, хуков, инструментов и персистенции сессии; perl alarm как timeout
-#     (timeout/gtimeout на машине нет). ~3 с стены на claude-opus-5.
+#     (timeout/gtimeout на машине нет). ~3–4 с стены на claude-opus-5-5 (2026-09-22).
 #     Включать: TITLE_BACKEND=headless в env лаунчера; TITLE_MODEL,
 #     TITLE_MAX_TIME — переопределения.
 #   Старый curl в api.anthropic.com (.title-key / Keychain speak11-anthropic-key)
@@ -324,7 +324,7 @@ $material"
     perl -e 'alarm shift; exec @ARGV' "${TITLE_MAX_TIME:-15}" \
     claude -p --setting-sources "" --strict-mcp-config --mcp-config '{"mcpServers":{}}' \
       --disable-slash-commands --tools "" --no-session-persistence \
-      --model "${TITLE_MODEL:-claude-opus-5}" --system-prompt "$sys" \
+      --model "${TITLE_MODEL:-claude-opus-5-5}" --system-prompt "$sys" \
       --output-format text "$user" < /dev/null 2>/dev/null)
   local rc=$?
   if [ "$rc" -ne 0 ] || [ -z "$out" ]; then

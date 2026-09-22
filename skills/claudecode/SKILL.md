@@ -117,8 +117,8 @@ sh "${CLAUDE_PLUGIN_ROOT}/scripts/apply-claude-home.sh" --plan
 
 Покажи **только дифф**, потом три вещи по строке (подробности — `references/settings.md`):
 
-1. `model: "opus[1m]"` — Opus с окном на 1M токенов. Нужен план **Max**; на Pro такая
-   модель списывает usage-кредиты.
+1. `model: "claude-opus-5-5"` — Opus 5.5, окно на 1M токенов у неё по умолчанию. Нужен
+   план **Max** и Claude Code ≥ 2.1.280; на Pro такая модель списывает usage-кредиты.
 2. `permissions.defaultMode: "bypassPermissions"` — агент выполняет команды и правит
    файлы, не спрашивая разрешения каждый раз.
 3. Слияние: шаблон побеждает по своим ключам, чужие ключи остаются, `env`,
