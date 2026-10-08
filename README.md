@@ -7,7 +7,7 @@
 терминал с командой `cld` и вкладка, которая открывается сразу в рабочей папке.
 
 ```
-claude plugin marketplace add https://github.com/beCyborg/jadlis-hub
+claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
 claude plugin install jadlis-claudecode@jadlis
 ```
 
@@ -57,7 +57,8 @@ claude plugin install jadlis-claudecode@jadlis
 4. **Папка.** `~/Jadlis/Система/Планы`, `~/Jadlis/.claude/rules` и заметка о том, как
    тут принято работать: план → проверка → реализация.
 5. **`~/.claude` один в один.** Слияние `settings.json`, затем `CLAUDE.md`, `rules/`,
-   `output-styles/jadlis.md`, три хука, `statusline-command.sh` и два служебных скрипта.
+   два стиля ответа (`jadlis.md` и `jadlis-voice.md`), четыре хука, `statusline-command.sh` и
+   четыре служебных скрипта.
 6. **Режим для читателя с СДВГ.** Делать нечего: его задаёт `output-styles/jadlis.md`
    из шага 5, а `outputStyle: "Jadlis"` включает его по умолчанию.
 7. **Уведомления.** `jadlis-notifications` приезжает сам как зависимость; остаётся один
@@ -76,7 +77,7 @@ claude plugin install jadlis-claudecode@jadlis
 | Кусок | Что именно |
 |---|---|
 | Зависимости | Homebrew, нативный `claude`, `git`, `jq`, `node`, `python@3.13`, `uv`, `poppler`, `tmux`, iTerm2, JetBrains Mono Nerd Font |
-| `~/.claude` | `settings.json`, `CLAUDE.md`, `rules/`, `output-styles/jadlis.md`, три хука, строка состояния, два служебных скрипта |
+| `~/.claude` | `settings.json`, `CLAUDE.md` с правилами письма, `rules/`, стили Jadlis и Jadlis Voice, четыре хука, строка состояния, четыре служебных скрипта |
 | Терминал | `~/.tmux.conf`, динамический профиль iTerm2 «Jadlis», блок `.zshrc` с командой `cld` |
 | Папка | каркас `~/Jadlis` и заметка «Приёмы работы — Claude Code» |
 | Уведомления | `jadlis-notifications` как зависимость плагина |
@@ -89,7 +90,7 @@ claude plugin install jadlis-claudecode@jadlis
 Ты — установщик. Поставь на этот Mac плагин jadlis-claudecode из маркетплейса jadlis.
 Ключей этому плагину не нужно, ничего секретного спрашивать не надо.
 Выполни ровно эти команды, дословно, ничего не сокращая:
-1. claude plugin marketplace add https://github.com/beCyborg/jadlis-hub
+1. claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
 2. claude plugin install jadlis-claudecode@jadlis
 3. claude plugin list — покажи мне строку про jadlis-claudecode и его версию.
 Потом скажи мне одной строкой: набери /claudecode.
@@ -101,7 +102,7 @@ claude plugin install jadlis-claudecode@jadlis
 **б) Команды руками.**
 
 ```
-claude plugin marketplace add https://github.com/beCyborg/jadlis-hub
+claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
 claude plugin install jadlis-claudecode@jadlis
 claude plugin list
 ```

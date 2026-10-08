@@ -1,6 +1,6 @@
 #!/bin/bash
-# Фоновое автообновление CLI-инструментов: claude / grok / codex.
-# Запускается из cld/cld2 (_cld_spawn в ~/.zshrc), работу терминала не блокирует.
+# Фоновое автообновление CLI-инструментов: claude / codex (grok убран 30.09.2026 — выключен с 14.09).
+# Запускается из cld (_cld_spawn в ~/.zshrc), работу терминала не блокирует.
 # Троттлинг: не чаще раза в THROTTLE_SECS; параллельные запуски отсекает lock.
 # Лог: ~/.cache/tools-autoupdate/update.log
 
@@ -39,9 +39,6 @@ fi
   echo "=== $(date '+%Y-%m-%d %H:%M:%S') tools-autoupdate ==="
   echo "--- claude update"
   "$HOME/.local/bin/claude" update </dev/null 2>&1
-  echo "--- grok update"
-  # Напрямую бинарь из ~/.grok/bin, минуя shim (shim подменяет HOME на iso-home)
-  "$HOME/.grok/bin/grok" update </dev/null 2>&1
   echo "--- brew upgrade codex"
   /opt/homebrew/bin/brew upgrade codex </dev/null 2>&1
   echo "=== done $(date '+%H:%M:%S')"

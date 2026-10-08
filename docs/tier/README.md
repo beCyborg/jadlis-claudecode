@@ -18,7 +18,7 @@
 
 ## Как выглядит
 
-![Компьютер на столе, из экрана механические руки работают с календарём, графиком, письмом и папкой](https://github.com/beCyborg/jadlis-hub/blob/main/docs/img/hub-12.webp?raw=1)
+![Компьютер на столе, из экрана механические руки работают с календарём, графиком, письмом и папкой](https://gitlab.com/beCyborg/jadlis-hub/-/raw/main/docs/img/hub-12.webp)
 
 Что `/claudecode` показывает перед записью настроек:
 
@@ -54,7 +54,7 @@
 
 ```text
 Ты — установщик. Выполни ровно эти шаги и ничего сверх них:
-1. Bash: claude plugin marketplace add https://github.com/beCyborg/jadlis-hub
+1. Bash: claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
 2. Bash: claude plugin install jadlis-claudecode@jadlis
 3. Скажи мне: «Набери /claudecode»
 Ничего не читай, не создавай и не ставь помимо этого.
@@ -63,7 +63,7 @@
 Руками — те же две команды в терминале:
 
 ```bash
-claude plugin marketplace add https://github.com/beCyborg/jadlis-hub
+claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
 claude plugin install jadlis-claudecode@jadlis
 ```
 

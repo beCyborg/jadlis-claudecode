@@ -1,8 +1,8 @@
 #!/bin/sh
 # apply-claude-home.sh — copy the owner's ~/.claude files into the recipient's $HOME/.claude.
 #
-# Copies: CLAUDE.md, rules/*.md, output-styles/jadlis.md, hooks/*.sh (chmod +x),
-#         statusline-command.sh (chmod +x), scripts/*.sh (chmod +x).
+# Copies: CLAUDE.md, rules/*.md, output-styles/{jadlis,jadlis-voice}.md, hooks/* (chmod +x),
+#         statusline-command.sh (chmod +x), scripts/* (chmod +x).
 # settings.json is NOT touched here — that is apply-settings.sh (it merges, it does not copy).
 #
 # A file that already exists and differs is left alone and reported as DIFFERS; --force
@@ -62,13 +62,14 @@ place CLAUDE.md                CLAUDE.md                    0
 place rules/routing.md         rules/routing.md             0
 place rules/bash-gotchas.md    rules/bash-gotchas.md        0
 place output-styles/jadlis.md  output-styles/jadlis.md      0
+place output-styles/jadlis-voice.md output-styles/jadlis-voice.md 0
 place statusline-command.sh    statusline-command.sh        1
 
-for h in session-start-title.sh rename-topic-from-prompt.sh _rename-apply.sh; do
+for h in session-start-title.sh rename-topic-from-prompt.sh _rename-apply.sh bash-traps.py; do
 	place "hooks/$h" "hooks/$h" 1
 done
 
-for s in claude-usage-fetch.sh tools-autoupdate.sh; do
+for s in claude-usage-fetch.sh tools-autoupdate.sh ste-ru-lint.py session-title.sh; do
 	place "scripts/$s" "scripts/$s" 1
 done
 

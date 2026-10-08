@@ -91,17 +91,17 @@ else
 fi
 
 hooks_ok=PASS
-for h in session-start-title.sh rename-topic-from-prompt.sh _rename-apply.sh; do
+for h in session-start-title.sh rename-topic-from-prompt.sh _rename-apply.sh bash-traps.py; do
 	[ -x "$CLAUDE_HOME/hooks/$h" ] || hooks_ok=FAIL
 done
 say hooks "$hooks_ok"
 
 [ -x "$CLAUDE_HOME/statusline-command.sh" ] && say statusline PASS || say statusline FAIL
-[ -f "$CLAUDE_HOME/output-styles/jadlis.md" ] && say output_style PASS || say output_style FAIL
+[ -f "$CLAUDE_HOME/output-styles/jadlis.md" ] && [ -f "$CLAUDE_HOME/output-styles/jadlis-voice.md" ] && say output_style PASS || say output_style FAIL
 [ -f "$CLAUDE_HOME/rules/routing.md" ] && say rules PASS || say rules FAIL
 
 scripts_ok=PASS
-for s in claude-usage-fetch.sh tools-autoupdate.sh; do
+for s in claude-usage-fetch.sh tools-autoupdate.sh ste-ru-lint.py session-title.sh; do
 	[ -x "$CLAUDE_HOME/scripts/$s" ] || scripts_ok=FAIL
 done
 say claude_scripts "$scripts_ok"

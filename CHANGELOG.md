@@ -2,6 +2,46 @@
 
 Формат: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии — [SemVer](https://semver.org/lang/ru/).
 
+## [1.1.0] — 2026-10-08 — Свежая выгрузка и переезд на GitLab / Fresh export and move to GitLab
+
+### Для человека
+- `CLAUDE.md` теперь полный: как понять задачу, довести её до проверки и отчитаться, плюс
+  правила письма для людей (STE-RU — короткие фразы, действующий залог, без канцелярита).
+  Личные разделы владельца (Codex, разрешения, диктовка) в выгрузку не попадают.
+- Второй стиль ответа — Jadlis Voice: для ответов, которые читает вслух голосовой движок.
+  Основной стиль Jadlis обновлён: результат первым, «От тебя:» последней строкой, без
+  поддакивания и без спора ради спора.
+- Два новых хука: `bash-traps.py` ловит известные ловушки в командах Bash, а проверка
+  STE-RU показывает агенту фразы заметки, которые нарушают правила письма.
+- `cld` запускает Opus 5.5 вместо старого `fable[1m]`; новая команда `tld` показывает
+  tmux-сессии с заголовками Claude Code.
+- Плагин и каталог `jadlis` теперь на GitLab: установка через
+  `https://gitlab.com/beCyborg/jadlis-hub.git`.
+
+### For agents
+- Changed: `tools/export-owner.py` — settings source is the live profile
+  (`$CLAUDE_CONFIG_DIR` → `~/.claude-B` → `~/.claude`, `--settings` overrides); hooks are a
+  whitelist (`KEEP_HOOK_RE`: session-start-title, rename-topic-from-prompt, bash-traps,
+  ste-ru-lint); `deniedMcpServers` dropped; deny rules for owner-only MCP/CLIs dropped;
+  `model` pinned to `claude-opus-5-5`; CLAUDE.md filtered by section
+  (`CLAUDE_DROP_SECTIONS`) and line; routing lines for owner agents/accounts rewritten to
+  plugin commands; bash-gotchas bullets on Keychain/profile B/Shortcuts dropped; zsh block
+  rebuilt from the owner's (runner `claude`, no spawner, `+ tld`); iTerm2
+  `Semantic History` dropped when it points at an unshipped owner script; scan also flags
+  the owner's login name.
+- Added: `assets/output-styles/jadlis-voice.md`, `assets/hooks/bash-traps.py`,
+  `assets/scripts/ste-ru-lint.py`, `assets/scripts/session-title.sh` (paths → `$HOME`).
+- Changed: `scripts/apply-claude-home.sh`, `scripts/probe.sh` — place and check the new files.
+- Changed: `assets/settings.template.json` — PreToolUse(Bash) `bash-traps.py`,
+  PostToolUse(Write|Edit|MultiEdit) `ste-ru-lint.py --hook`,
+  `env.CLAUDE_CODE_WORKFLOW_MAX_CONCURRENT_AGENTS=36`, `subagentPromptCacheTtl: 1h`,
+  `modelSettings.claude-opus-4-8.effortLevel: xhigh`, allow for `jadlis-search` plugin MCPs.
+- Changed: `.github/workflows/ci.yml` → `.gitlab-ci.yml` (hub `/ci/plugin-ci.yml`); all
+  `github.com/beCyborg/*` links → `gitlab.com/beCyborg/*`; `version` 1.0.2 → 1.1.0.
+- Migration: re-run `/claudecode`. `apply-settings.sh` deep-merges, so keys the template
+  no longer carries (`alwaysThinkingEnabled`, `teammateMode`, …) stay in an existing
+  `settings.json`; changed asset files show as `DIFFERS` and need `--force`.
+
 ## [1.0.2] — 2026-09-22 — Opus 5.5 на effort high / Opus 5.5 at effort high
 
 ### Для человека

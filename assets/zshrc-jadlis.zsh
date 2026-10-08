@@ -1,4 +1,4 @@
-# jadlis-claudecode — terminal block (cld). Source: owner's ~/.zshrc, exported by tools/export-owner.py
+# jadlis-claudecode — terminal block (cld, tld). Source: owner's ~/.zshrc, exported by tools/export-owner.py
 alias cc='cld'
 _tmux_server_alive() {
   tmux list-sessions &>/dev/null
@@ -14,12 +14,12 @@ _cld_session_name() {
   printf '%s' "$sanitized"
 }
 
-# _cld_spawn <runner> <base> [claude args...] — общая механика cld/cld2.
+# _cld_spawn <runner> <base> [claude args...] — механика cld.
 _cld_spawn() {
   local runner="$1" base="$2"
   shift 2
 
-  # Фоновое автообновление claude/grok/codex (throttle 6ч, лог ~/.cache/tools-autoupdate/)
+  # Фоновое автообновление claude/codex (throttle 6ч, лог ~/.cache/tools-autoupdate/)
   ~/.claude/scripts/tools-autoupdate.sh &>/dev/null &!
 
   local session="$base"
@@ -42,7 +42,7 @@ _cld_spawn() {
 
   local -a claude_args=(
     --dangerously-skip-permissions
-    --model 'fable[1m]'
+    --model claude-opus-5-5   # Opus 5.5, 1M по умолчанию (22.09.2026; с 18.09 — opus[1m], до того fable[1m])
   )
   (( $# > 0 )) && claude_args+=("$@")
 
@@ -61,8 +61,19 @@ _cld_spawn() {
 # cld — всегда создаёт новую Claude Code session с auto-incremented suffix
 # (base, base_2, base_3, ...). base = имя проекта из git remote или basename($PWD).
 cld() {
-  # env -u обязателен: запущенный из сессии второго аккаунта, cld иначе
-  # унаследует его конфиг-дир и токен и будет жечь квоту B под видом A
-  _cld_spawn "env -u CLAUDE_CODE_OAUTH_TOKEN -u CLAUDE_CONFIG_DIR claude" \
-    "$(_cld_session_name)" "$@"
+  _cld_spawn claude "$(_cld_session_name)" "$@"
+}
+
+# tld — tmux-сессии с заголовками Claude Code (title панели). Без аргумента — список,
+# с именем — attach снаружи tmux / switch-client изнутри (по $TMUX).
+tld() {
+  if [[ -z "$1" ]]; then
+    tmux list-panes -a -F '#{session_name}	#{?session_attached,*, }	#{pane_title}' | column -t -s $'\t'
+    return
+  fi
+  if [[ -n "$TMUX" ]]; then
+    tmux switch-client -t "=$1"
+  else
+    tmux attach -t "=$1"
+  fi
 }

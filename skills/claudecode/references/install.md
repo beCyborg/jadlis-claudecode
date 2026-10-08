@@ -22,11 +22,11 @@
 | `iterm_profile` | `DynamicProfiles/jadlis.json` | профиль «Jadlis» и рабочая папка `~/Jadlis` |
 | `zshrc_block` | блок в `~/.zshrc` | команда `cld` и фоновое автообновление CLI |
 | `settings_merged` | `~/.claude/settings.json` | настройки владельца слиты в файл получателя |
-| `hooks` | три хука в `~/.claude/hooks` | имя сессии и заголовок вкладки |
+| `hooks` | четыре хука в `~/.claude/hooks` | имя сессии, заголовок вкладки, ловушки Bash |
 | `statusline` | `~/.claude/statusline-command.sh` | папка, контекст, модель, лимиты в строке состояния |
-| `output_style` | `~/.claude/output-styles/jadlis.md` | стиль ответа для читателя с СДВГ |
+| `output_style` | `~/.claude/output-styles/jadlis.md` и `jadlis-voice.md` | стиль ответа для читателя с СДВГ, текстом и вслух |
 | `rules` | `~/.claude/rules/*.md` | маршрутизация инструментов и гоча Bash |
-| `claude_scripts` | `~/.claude/scripts/*.sh` | обновление CLI и чтение квоты для строки состояния |
+| `claude_scripts` | `~/.claude/scripts/*` | обновление CLI, квота для строки состояния, проверка текста, имя сессии |
 | `jadlis_dir` | `~/Jadlis` | рабочая папка терминала и место для заметок |
 
 ## Установка

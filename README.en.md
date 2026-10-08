@@ -7,7 +7,7 @@ English · [Русский](README.md)
 the `cld` command and a tab that opens straight in the working folder.
 
 ```
-claude plugin marketplace add https://github.com/beCyborg/jadlis-hub
+claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
 claude plugin install jadlis-claudecode@jadlis
 ```
 
@@ -57,7 +57,8 @@ acts. Before an install and before any overwrite — a question.
 4. **The folder.** `~/Jadlis/Система/Планы`, `~/Jadlis/.claude/rules` and a note on how
    work is done here: plan → verification → implementation.
 5. **`~/.claude` one to one.** The `settings.json` merge, then `CLAUDE.md`, `rules/`,
-   `output-styles/jadlis.md`, three hooks, `statusline-command.sh` and two helper scripts.
+   two answer styles (`jadlis.md` and `jadlis-voice.md`), four hooks, `statusline-command.sh`
+   and four helper scripts.
 6. **The mode for a reader with ADHD.** Nothing to do: `output-styles/jadlis.md` from
    step 5 defines it, and `outputStyle: "Jadlis"` turns it on by default.
 7. **Notifications.** `jadlis-notifications` arrives on its own as a dependency; one
@@ -76,7 +77,7 @@ What lands in the end:
 | Piece | What exactly |
 |---|---|
 | Dependencies | Homebrew, native `claude`, `git`, `jq`, `node`, `python@3.13`, `uv`, `poppler`, `tmux`, iTerm2, JetBrains Mono Nerd Font |
-| `~/.claude` | `settings.json`, `CLAUDE.md`, `rules/`, `output-styles/jadlis.md`, three hooks, the status line, two helper scripts |
+| `~/.claude` | `settings.json`, `CLAUDE.md` with the writing rules, `rules/`, the Jadlis and Jadlis Voice styles, four hooks, the status line, four helper scripts |
 | Terminal | `~/.tmux.conf`, the "Jadlis" iTerm2 dynamic profile, the `.zshrc` block with `cld` |
 | Folder | the `~/Jadlis` skeleton and the note "Приёмы работы — Claude Code" |
 | Notifications | `jadlis-notifications` as a plugin dependency |
@@ -89,7 +90,7 @@ What lands in the end:
 You are the installer. Install the plugin jadlis-claudecode from the jadlis marketplace
 on this Mac. This plugin needs no keys, so ask me for nothing secret.
 Run exactly these commands, verbatim, shortening nothing:
-1. claude plugin marketplace add https://github.com/beCyborg/jadlis-hub
+1. claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
 2. claude plugin install jadlis-claudecode@jadlis
 3. claude plugin list — show me the line about jadlis-claudecode and its version.
 After that tell me in one line: type /claudecode.
@@ -101,7 +102,7 @@ If a command returns an error, stop, show me the output, and do not move to the 
 **b) Commands by hand.**
 
 ```
-claude plugin marketplace add https://github.com/beCyborg/jadlis-hub
+claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
 claude plugin install jadlis-claudecode@jadlis
 claude plugin list
 ```

@@ -1,14 +1,14 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "jadlis-claudecode",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "displayName": "claudecode — рабочее место один в один",
-  "description": "Первый шаг маршрута Jadlis: собирает Claude Code, терминал и папку ~/Jadlis один в один с машиной владельца — зависимости, слияние ~/.claude/settings.json, правила, стиль ответа, хуки, строка состояния, tmux, динамический профиль iTerm2 и команда cld.",
+  "description": "Первый шаг маршрута Jadlis: собирает Claude Code, терминал и папку ~/Jadlis один в один с машиной владельца — зависимости, слияние ~/.claude/settings.json, правила и правила письма, два стиля ответа, хуки, строка состояния, tmux, динамический профиль iTerm2 и команда cld.",
   "author": {
     "name": "Be Cyborg"
   },
-  "homepage": "https://github.com/beCyborg/jadlis-claudecode",
-  "repository": "https://github.com/beCyborg/jadlis-claudecode",
+  "homepage": "https://gitlab.com/beCyborg/jadlis-claudecode",
+  "repository": "https://gitlab.com/beCyborg/jadlis-claudecode",
   "keywords": [
     "setup",
     "claude-code",

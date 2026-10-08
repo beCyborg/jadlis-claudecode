@@ -19,7 +19,7 @@ The `jadlis-claudecode` plugin does this with one command, not with a twenty-ste
 
 ## What it looks like
 
-![A computer on a desk, robotic arms reaching out of the screen to handle a calendar, a chart, an envelope and a folder](https://github.com/beCyborg/jadlis-hub/blob/main/docs/img/hub-12.webp?raw=1)
+![A computer on a desk, robotic arms reaching out of the screen to handle a calendar, a chart, an envelope and a folder](https://gitlab.com/beCyborg/jadlis-hub/-/raw/main/docs/img/hub-12.webp)
 
 What `/claudecode` shows before writing settings:
 
@@ -55,7 +55,7 @@ Then paste this block into Claude Code as is:
 
 ```text
 You are an installer. Run exactly these steps and nothing else:
-1. Bash: claude plugin marketplace add https://github.com/beCyborg/jadlis-hub
+1. Bash: claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
 2. Bash: claude plugin install jadlis-claudecode@jadlis
 3. Tell me: "Type /claudecode"
 Read nothing, create nothing, install nothing beyond this.
@@ -64,7 +64,7 @@ Read nothing, create nothing, install nothing beyond this.
 By hand — the same two commands in a terminal:
 
 ```bash
-claude plugin marketplace add https://github.com/beCyborg/jadlis-hub
+claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
 claude plugin install jadlis-claudecode@jadlis
 ```
 
