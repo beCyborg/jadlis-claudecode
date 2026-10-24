@@ -2,6 +2,30 @@
 
 Формат: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии — [SemVer](https://semver.org/lang/ru/).
 
+## [1.2.0] — 2026-10-24 — Новый Jadlis Voice / New Jadlis Voice
+
+### Для человека
+- Стиль Jadlis Voice теперь даёт полный ответ на экране, а в конце — блок «🔊 Голосом»:
+  тот же ответ, пересказанный для слуха. Блок выделяют и отдают голосовому движку.
+  Раньше стиль давал только устный ответ без разметки.
+- По умолчанию по-прежнему включён текстовый стиль Jadlis. Jadlis Voice включается
+  через `/output-style`.
+- Свежая выгрузка правил: для русского поиска Exa теперь `--type auto`, в ловушки Bash
+  добавлен встроенный `log` в zsh.
+
+### For agents
+- Changed: `assets/output-styles/jadlis-voice.md` — the owner's 2026-10-22 style (screen part +
+  trailing `## 🔊 Голосом` block); `tools/export-owner.py` `VOICE_TEXT_FIX` rewrites the two
+  lines about the owner's play-button mod (`jadlis-voice-play`, not shipped) for a recipient.
+- Changed: `tools/export-owner.py` — `PIN["outputStyle"] = "Jadlis"` (the owner's live default
+  is now Jadlis Voice); `ROUTING_DROP_RE` drops the owner's screen-time (`jtt`) line;
+  `DENY_DROP_RE` also drops the owner's mail guards (himalaya, smtplib, `send.toml`,
+  `k02-mail`, `jm send`) and now filters `permissions.ask` too (empty → removed).
+- Changed: `assets/rules/routing.md` (Exa RU `--type auto`), `assets/rules/bash-gotchas.md`
+  (zsh `log` builtin), `assets/settings.template.json` (`idleCompaction: false`).
+- Changed: `skills/claudecode/SKILL.md` step 6 and `references/settings.md` describe the new
+  style; `version` 1.1.0 → 1.2.0.
+
 ## [1.1.0] — 2026-10-08 — Свежая выгрузка и переезд на GitLab / Fresh export and move to GitLab
 
 ### Для человека

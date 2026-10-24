@@ -2,7 +2,7 @@
 
 - Vault semantic search (`Знания/`) → MCP `qmd` `query`, payload form only — exact payload and rules in `Jadlis/CLAUDE.md § Semantic search`. Exact string/path → `rg -uu -F` (`-uul` for file names).
 - Library/SDK docs → Context7 MCP.
-- Web search → /jadlis-search:search (`websearch.py`): research/news/freshness → `brave`; semantic "describe page", people/company/publication, domains/dates → `exa` (RU → `--type keyword`); `both` only on explicit request. Never native WebSearch/WebFetch. Main thread uses the script (cost log), not `mcp__exa__*`/`brave_web_search` directly. Keys of the research stack → /jadlis-search:keys.
+- Web search → /jadlis-search:search (`websearch.py`): research/news/freshness → `brave`; semantic "describe page", people/company/publication, domains/dates → `exa` (RU → `--type auto`; `keyword` lost 14:0 in the blind R3 test, 12.10); `both` only on explicit request. Never native WebSearch/WebFetch. Main thread uses the script (cost log), not `mcp__exa__*`/`brave_web_search` directly. Keys of the research stack → /jadlis-search:keys.
 - Page text → ladder: `defuddle parse --md` → `r.jina.ai/<url>` → `websearch.py contents <url>` → Firecrawl scrape LAST (never for PDF or x.com). Full ladder, limits, rotator → /jadlis-search:search body "Routing details".
 - PDF → `pdf-fetch.sh` from jadlis-search, then Read (path and escalation → /jadlis-search:search body); its hook blocks Firecrawl on PDF URLs (billed per page).
 - Scrape one page / site map / multi-URL extract → Firecrawl scrape / map / extract (via local key rotator; details → /jadlis-search:search body).

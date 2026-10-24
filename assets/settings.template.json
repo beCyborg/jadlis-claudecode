@@ -218,6 +218,7 @@
   "theme": "auto",
   "preferredNotifChannel": "notifications_disabled",
   "autoCompactEnabled": true,
+  "idleCompaction": false,
   "switchModelsOnFlag": true,
   "autoScrollEnabled": true,
   "remoteControlAtStartup": true,

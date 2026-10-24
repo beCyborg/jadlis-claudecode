@@ -9,7 +9,7 @@ Produces (under --out):
   CLAUDE.md                global CLAUDE.md minus owner-only sections (Codex, permissions, dictation)
   rules/routing.md         routing without personal tools; operator agents → plugin commands
   rules/bash-gotchas.md    minus the owner's Keychain/profile-B bullets
-  output-styles/*.md       jadlis.md and jadlis-voice.md as is
+  output-styles/*.md       jadlis.md as is; jadlis-voice.md without the owner's play-button mod
   hooks/                   session-start-title, rename-topic-from-prompt, _rename-apply, bash-traps.py
   statusline-command.sh, scripts/: claude-usage-fetch.sh, tools-autoupdate.sh, ste-ru-lint.py, session-title.sh
   tmux.conf                ~/.tmux.conf as is
@@ -33,6 +33,9 @@ USER = getpass.getuser()
 DROP_TOP = {"enabledPlugins", "pluginConfigs", "extraKnownMarketplaces", "feedbackSurveyRate", "deniedMcpServers"}
 # the template's own pins: the owner's live profile may hold a manual experiment (model "fable")
 PIN = {"model": "claude-opus-5-5"}
+# a recipient has no play-button mod, so Jadlis Voice would print a visible voice block under
+# every answer — the template keeps the text style on and leaves Voice one /output-style away
+PIN["outputStyle"] = "Jadlis"
 # hooks the plugin ships; every other hook command in the owner's settings is his own infra
 KEEP_HOOK_RE = re.compile(r"session-start-title\.sh|rename-topic-from-prompt\.sh|bash-traps\.py|ste-ru-lint\.py")
 # env variables whose NAME says the value is private (a host, a mailbox, any kind of key)
@@ -40,10 +43,10 @@ ENV_DROP_RE = re.compile(r"(_API_KEY|_KEY|_TOKEN|_SECRET|_EMAIL|_MAILTO|_IP|_HOS
 ENV_DROP: set[str] = set()
 ALLOW_DROP_RE = re.compile(r"^(mcp__(reddit|ticktick|hn|substack|producthunt|hevy|playwright|firecrawl|brave-search|exa)__|Bash\(~/\.claude-code-docs|Bash\(~/\.claude/scripts/docs-mirror)")
 # deny rules for MCP servers and CLIs only the owner has
-DENY_DROP_RE = re.compile(r"^(mcp__(21st|grok-mcp|twitterapi-mcp)__|Bash\((npx|pnpm|21st)\b|Bash\(.*grok)")
+DENY_DROP_RE = re.compile(r"^(mcp__(21st|grok-mcp|twitterapi-mcp)__|Bash\((npx|pnpm|21st)\b|Bash\(.*grok|Bash\(.*(himalaya|smtplib|send\.toml|k02-mail|jm send))")
 ALLOW_RENAME = {"mcp__plugin_browser_playwright__*": "mcp__plugin_jadlis-browser_playwright__*"}
 # routing.md lines that name the owner's personal tools (dropped)
-ROUTING_DROP_RE = re.compile(r"Reddit|Twitter|Вастрик|HN / Substack|/yandex-search|RU web|Claude Code docs|^- Telegram|^- Operator runs")
+ROUTING_DROP_RE = re.compile(r"Screen time|Reddit|Twitter|Вастрик|HN / Substack|/yandex-search|RU web|Claude Code docs|^- Telegram|^- Operator runs")
 # routing lines rewritten for the recipient: the owner routes through his own agents and accounts
 ROUTING_REPLACE = {
     "- PDF →": "- PDF → `pdf-fetch.sh` from jadlis-search, then Read (path and escalation → /jadlis-search:search body); its hook blocks Firecrawl on PDF URLs (billed per page).",
@@ -70,6 +73,14 @@ CLAUDE_TEXT_FIX = {
 # bash-gotchas bullets about the owner's Keychain, profile B and Shortcuts
 GOTCHA_DROP_RE = re.compile(r"on profile B|B blob|fresh-user simulation|writes `pluginSecrets` INTO|CLAUDE_CONFIG_DIR=~/\.claude-B claude plugin|^- `shortcuts sign")
 GOTCHA_TEXT_FIX = {f"com.{USER}.": "com.<you>.", f"publish.obsidian.md/{USER}/": "publish.obsidian.md/<site>/"," Unquoted `=` words no longer break Bash: `setopt NO_EQUALS` under `$CLAUDECODE` in `~/.zshenv`.": ""}
+# Jadlis Voice: the owner's Mac hides the voice block behind a play button (personal mod
+# jadlis-voice-play, not shipped) — a recipient sees the block and selects it for TTS
+VOICE_TEXT_FIX = {
+    "— the Mac terminal hides that block behind a play button (mod jadlis-voice), the phone shows it for selection and the system voice":
+        "— the reader selects that block and has a TTS voice read it aloud",
+    "On the Mac the block is hidden and read by an expressive TTS voice (ElevenLabs Eleven v4, voice Nikolay, played at ×1.25); on the phone the reader selects it and has it read aloud.":
+        "The reader selects the block and has it read aloud by an expressive TTS voice (ElevenLabs Eleven v4).",
+}
 # command forms that changed with the 2026-09-10 rename (plugin jadlis-<x>, bare command <x>)
 TEXT_FIX = {"/browser:browser": "/browser", "/computer-use:computer-use": "/computer-use",
             f"-a {getpass.getuser()}": '-a "$USER"'}
@@ -93,6 +104,9 @@ def settings_template(src: dict) -> dict:
     perms["allow"] = allow
     out["permissions"] = perms
     perms["deny"] = [d for d in perms.get("deny", []) if not DENY_DROP_RE.match(d) and str(HOME) not in d]
+    perms["ask"] = [d for d in perms.get("ask", []) if not DENY_DROP_RE.match(d) and str(HOME) not in d]
+    if not perms["ask"]:
+        perms.pop("ask")
     hooks = {}
     for ev, entries in src.get("hooks", {}).items():
         kept = []
@@ -246,8 +260,12 @@ def main() -> int:
     (out / "rules/routing.md").write_text(routing_md((CC / "rules/routing.md").read_text()))
     (out / "rules/bash-gotchas.md").write_text(gotchas_md((CC / "rules/bash-gotchas.md").read_text()))
     (out / "output-styles").mkdir(exist_ok=True)
-    for st in ("jadlis.md", "jadlis-voice.md"):
-        shutil.copy(CC / "output-styles" / st, out / "output-styles" / st)
+    shutil.copy(CC / "output-styles/jadlis.md", out / "output-styles/jadlis.md")
+    voice = (CC / "output-styles/jadlis-voice.md").read_text()
+    for k, v in VOICE_TEXT_FIX.items():
+        assert k in voice, f"jadlis-voice.md changed, VOICE_TEXT_FIX is stale: {k[:60]}"
+        voice = voice.replace(k, v)
+    (out / "output-styles/jadlis-voice.md").write_text(voice)
     (out / "hooks").mkdir(exist_ok=True)
     for h in ("session-start-title.sh", "rename-topic-from-prompt.sh", "_rename-apply.sh", "bash-traps.py"):
         shutil.copy(CC / "hooks" / h, out / "hooks" / h)
