@@ -57,8 +57,8 @@ acts. Before an install and before any overwrite — a question.
 4. **The folder.** `~/Jadlis/Система/Планы`, `~/Jadlis/.claude/rules` and a note on how
    work is done here: plan → verification → implementation.
 5. **`~/.claude` one to one.** The `settings.json` merge, then `CLAUDE.md`, `rules/`,
-   two answer styles (`jadlis.md` and `jadlis-voice.md`), four hooks, `statusline-command.sh`
-   and four helper scripts.
+   two answer styles (`jadlis.md` and `jadlis-voice.md`), four hooks, `statusline-command.sh`,
+   four helper scripts and computer-use auto-approve in tmux.
 6. **The mode for a reader with ADHD.** Nothing to do: `output-styles/jadlis.md` from
    step 5 defines it, and `outputStyle: "Jadlis"` turns it on by default.
 7. **Notifications.** `jadlis-notifications` arrives on its own as a dependency; one
@@ -77,7 +77,7 @@ What lands in the end:
 | Piece | What exactly |
 |---|---|
 | Dependencies | Homebrew, native `claude`, `git`, `jq`, `node`, `python@3.13`, `uv`, `poppler`, `tmux`, iTerm2, JetBrains Mono Nerd Font |
-| `~/.claude` | `settings.json`, `CLAUDE.md` with the writing rules, `rules/`, the Jadlis and Jadlis Voice styles, four hooks, the status line, four helper scripts |
+| `~/.claude` | `settings.json`, `CLAUDE.md` with the writing rules, `rules/`, the Jadlis and Jadlis Voice styles, four hooks, the status line, four helper scripts, computer-use auto-approve in tmux |
 | Terminal | `~/.tmux.conf`, the "Jadlis" iTerm2 dynamic profile, the `.zshrc` block with `cld` |
 | Folder | the `~/Jadlis` skeleton and the note "Приёмы работы — Claude Code" |
 | Notifications | `jadlis-notifications` as a plugin dependency |

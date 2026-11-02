@@ -2,6 +2,30 @@
 
 Формат: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии — [SemVer](https://semver.org/lang/ru/).
 
+## [1.3.0] — 2026-11-02 — Автоподтверждение computer use / Computer-use auto-approve
+
+### Для человека
+- Окно «Computer Use wants to control these apps» больше не ждёт клика: в сессии внутри
+  tmux (`cld`) скрипт сам нажимает «Allow for this session». Так Claude может работать с
+  приложениями Мака, пока ты с телефона или не у экрана.
+- Можно запретить отдельные приложения: одна строка в `~/.config/jadlis/cu-deny-apps` —
+  им скрипт отвечает отказом, и Claude сообщает об этом, а не ждёт.
+- Вне tmux ничего не меняется: окно ждёт тебя, как раньше.
+
+### For agents
+- Added: `assets/scripts/cu-autoapprove.sh` (pane watcher: detects the dialog by its title +
+  anchored Deny/(esc) line + cursor, sends Down+Enter / Enter, Esc for deny-listed apps; rate
+  limit 6 actions/60 s) and `assets/scripts/cu-autoapprove-hook.sh` (PreToolUse
+  `mcp__computer-use__.*`: starts or extends the watcher for `$TMUX_PANE`, TTL 90 s).
+- Added: template hook `PreToolUse` `mcp__computer-use__.*` → `~/.claude/scripts/cu-autoapprove-hook.sh`.
+- Changed: watcher takes the tmux socket from `$TMUX` (was the owner's uid path); optional deny
+  list `~/.config/jadlis/cu-deny-apps` (first non-# line, ERE on the dialog's `◉ <app>` lines).
+- Changed: `apply-claude-home.sh` and `probe.sh` place/check both scripts; `export-owner.py` keeps
+  the hook and exports both scripts.
+- Changed (owner export): `syncClaudeAiSkills`/`syncClaudeAiPlugins: false`; Opus 4.8 effort `high`.
+- Tested: live run in an isolated tmux server against a rendered dialog — an allowed app got
+  Down+Enter, `1Password` with the deny list got Esc.
+
 ## [1.2.0] — 2026-10-24 — Новый Jadlis Voice / New Jadlis Voice
 
 ### Для человека

@@ -57,8 +57,8 @@ claude plugin install jadlis-claudecode@jadlis
 4. **Папка.** `~/Jadlis/Система/Планы`, `~/Jadlis/.claude/rules` и заметка о том, как
    тут принято работать: план → проверка → реализация.
 5. **`~/.claude` один в один.** Слияние `settings.json`, затем `CLAUDE.md`, `rules/`,
-   два стиля ответа (`jadlis.md` и `jadlis-voice.md`), четыре хука, `statusline-command.sh` и
-   четыре служебных скрипта.
+   два стиля ответа (`jadlis.md` и `jadlis-voice.md`), четыре хука, `statusline-command.sh`,
+   четыре служебных скрипта и автоподтверждение computer use в tmux.
 6. **Режим для читателя с СДВГ.** Делать нечего: его задаёт `output-styles/jadlis.md`
    из шага 5, а `outputStyle: "Jadlis"` включает его по умолчанию.
 7. **Уведомления.** `jadlis-notifications` приезжает сам как зависимость; остаётся один
@@ -77,7 +77,7 @@ claude plugin install jadlis-claudecode@jadlis
 | Кусок | Что именно |
 |---|---|
 | Зависимости | Homebrew, нативный `claude`, `git`, `jq`, `node`, `python@3.13`, `uv`, `poppler`, `tmux`, iTerm2, JetBrains Mono Nerd Font |
-| `~/.claude` | `settings.json`, `CLAUDE.md` с правилами письма, `rules/`, стили Jadlis и Jadlis Voice, четыре хука, строка состояния, четыре служебных скрипта |
+| `~/.claude` | `settings.json`, `CLAUDE.md` с правилами письма, `rules/`, стили Jadlis и Jadlis Voice, четыре хука, строка состояния, четыре служебных скрипта, автоподтверждение computer use в tmux |
 | Терминал | `~/.tmux.conf`, динамический профиль iTerm2 «Jadlis», блок `.zshrc` с командой `cld` |
 | Папка | каркас `~/Jadlis` и заметка «Приёмы работы — Claude Code» |
 | Уведомления | `jadlis-notifications` как зависимость плагина |

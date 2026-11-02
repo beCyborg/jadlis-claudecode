@@ -2,7 +2,7 @@
 # apply-claude-home.sh — copy the owner's ~/.claude files into the recipient's $HOME/.claude.
 #
 # Copies: CLAUDE.md, rules/*.md, output-styles/{jadlis,jadlis-voice}.md, hooks/* (chmod +x),
-#         statusline-command.sh (chmod +x), scripts/* (chmod +x).
+#         statusline-command.sh (chmod +x), scripts/* (chmod +x; incl. the computer-use auto-approve pair).
 # settings.json is NOT touched here — that is apply-settings.sh (it merges, it does not copy).
 #
 # A file that already exists and differs is left alone and reported as DIFFERS; --force
@@ -69,7 +69,7 @@ for h in session-start-title.sh rename-topic-from-prompt.sh _rename-apply.sh bas
 	place "hooks/$h" "hooks/$h" 1
 done
 
-for s in claude-usage-fetch.sh tools-autoupdate.sh ste-ru-lint.py session-title.sh; do
+for s in claude-usage-fetch.sh tools-autoupdate.sh ste-ru-lint.py session-title.sh cu-autoapprove.sh cu-autoapprove-hook.sh; do
 	place "scripts/$s" "scripts/$s" 1
 done
 

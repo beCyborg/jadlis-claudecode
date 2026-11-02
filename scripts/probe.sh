@@ -101,7 +101,7 @@ say hooks "$hooks_ok"
 [ -f "$CLAUDE_HOME/rules/routing.md" ] && say rules PASS || say rules FAIL
 
 scripts_ok=PASS
-for s in claude-usage-fetch.sh tools-autoupdate.sh ste-ru-lint.py session-title.sh; do
+for s in claude-usage-fetch.sh tools-autoupdate.sh ste-ru-lint.py session-title.sh cu-autoapprove.sh cu-autoapprove-hook.sh; do
 	[ -x "$CLAUDE_HOME/scripts/$s" ] || scripts_ok=FAIL
 done
 say claude_scripts "$scripts_ok"

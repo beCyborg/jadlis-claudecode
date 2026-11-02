@@ -1,6 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 90,
+  "syncClaudeAiSkills": false,
+  "syncClaudeAiPlugins": false,
   "skillListingMaxDescChars": 600,
   "skillListingBudgetFraction": 0.01,
   "env": {
@@ -126,6 +128,16 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "mcp__computer-use__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/cu-autoapprove-hook.sh",
+            "timeout": 5
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -200,7 +212,7 @@
       "effortLevel": "high"
     },
     "claude-opus-4-8": {
-      "effortLevel": "xhigh"
+      "effortLevel": "high"
     }
   },
   "showClearContextOnPlanAccept": true,

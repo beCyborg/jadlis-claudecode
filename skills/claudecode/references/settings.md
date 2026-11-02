@@ -50,6 +50,8 @@
 | `scripts/claude-usage-fetch.sh` | единственный, кому можно спрашивать квоту у API: общий кэш и backoff |
 | `scripts/tools-autoupdate.sh` | фоновое обновление `claude` и `codex` не чаще раза в 6 часов |
 | `scripts/ste-ru-lint.py` | проверка текста по правилам письма; вручную — `uv run -q --with pymorphy3 python ~/.claude/scripts/ste-ru-lint.py <file.md>`, хуком — после записи заметки в `~/Jadlis` |
+| `scripts/cu-autoapprove-hook.sh` | хук перед каждым вызовом computer use: запускает наблюдателя за панелью tmux этой сессии |
+| `scripts/cu-autoapprove.sh` | наблюдатель: видит окно «Computer Use wants to control these apps» и нажимает «Allow for this session»; приложениям из `~/.config/jadlis/cu-deny-apps` отказывает (Esc); лог `~/.claude/logs/cu-autoapprove.log` |
 | `scripts/session-title.sh` | имя сессии через `claude -p` (Sonnet 5.5) для промпта с файлом, плана или скилла |
 
 ## Хуки: что важно знать получателю
@@ -68,6 +70,12 @@
   `BASH_TRAPS_OFF=1` в окружении. Любая внутренняя ошибка = команда идёт как есть.
 - `ste-ru-lint.py` в режиме хука смотрит только `.md` в папках `~/Jadlis` (`Знания`,
   `Периоды`, `Проекты`, `Цели`, `Потребности`, `Система/Планы`). Ему нужен `uv` из шага 2.
+- Автоподтверждение computer use разрешает всё, как у владельца: терминалы, Finder, «Системные
+  настройки» тоже. Окно появляется раз на приложение за сессию. Работает только внутри tmux:
+  наблюдатель читает панель и нажимает клавиши в ней; вне tmux окно ждёт человека. Список
+  отказов — первая строка `~/.config/jadlis/cu-deny-apps`, расширенный регэксп по именам
+  приложений в окне (имена бывают русскими: «Системные настройки»). Пример для Мака, где в
+  1Password лежат карты: `1Password|Связка ключей|Keychain Access|Терминал|Terminal|iTerm|Редактор скриптов|Script Editor|Automator|Быстрые команды|Shortcuts`.
 - `tools-autoupdate.sh` обновляет `codex`, если он установлен; если нет —
   соответствующая строка в логе `~/.cache/tools-autoupdate/update.log` будет с ошибкой,
   на работу это не влияет.

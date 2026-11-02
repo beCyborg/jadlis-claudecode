@@ -11,7 +11,8 @@ Produces (under --out):
   rules/bash-gotchas.md    minus the owner's Keychain/profile-B bullets
   output-styles/*.md       jadlis.md as is; jadlis-voice.md without the owner's play-button mod
   hooks/                   session-start-title, rename-topic-from-prompt, _rename-apply, bash-traps.py
-  statusline-command.sh, scripts/: claude-usage-fetch.sh, tools-autoupdate.sh, ste-ru-lint.py, session-title.sh
+  statusline-command.sh, scripts/: claude-usage-fetch.sh, tools-autoupdate.sh, ste-ru-lint.py, session-title.sh,
+                           cu-autoapprove.sh + cu-autoapprove-hook.sh (computer-use dialog auto-approve in tmux)
   tmux.conf                ~/.tmux.conf as is
   zshrc-jadlis.zsh         the cld + tld block on plain `claude` (no profile B, no spawner, no cldday)
   iterm2-profile.json      iTerm2 Dynamic Profile built from the owner's "Default" bookmark
@@ -37,7 +38,7 @@ PIN = {"model": "claude-opus-5-5"}
 # every answer — the template keeps the text style on and leaves Voice one /output-style away
 PIN["outputStyle"] = "Jadlis"
 # hooks the plugin ships; every other hook command in the owner's settings is his own infra
-KEEP_HOOK_RE = re.compile(r"session-start-title\.sh|rename-topic-from-prompt\.sh|bash-traps\.py|ste-ru-lint\.py")
+KEEP_HOOK_RE = re.compile(r"session-start-title\.sh|rename-topic-from-prompt\.sh|bash-traps\.py|ste-ru-lint\.py|cu-autoapprove-hook\.sh")
 # env variables whose NAME says the value is private (a host, a mailbox, any kind of key)
 ENV_DROP_RE = re.compile(r"(_API_KEY|_KEY|_TOKEN|_SECRET|_EMAIL|_MAILTO|_IP|_HOST)$")
 ENV_DROP: set[str] = set()
@@ -271,7 +272,7 @@ def main() -> int:
         shutil.copy(CC / "hooks" / h, out / "hooks" / h)
     shutil.copy(CC / "statusline-command.sh", out / "statusline-command.sh")
     (out / "scripts").mkdir(exist_ok=True)
-    for sc in ("claude-usage-fetch.sh", "tools-autoupdate.sh", "ste-ru-lint.py"):
+    for sc in ("claude-usage-fetch.sh", "tools-autoupdate.sh", "ste-ru-lint.py", "cu-autoapprove.sh", "cu-autoapprove-hook.sh"):
         shutil.copy(CC / "scripts" / sc, out / "scripts" / sc)
     # headless session namer called by rename-topic-from-prompt.sh; its PATH and claude binary are absolute
     (out / "scripts/session-title.sh").write_text((CC / "scripts/session-title.sh").read_text().replace(str(HOME), "$HOME"))

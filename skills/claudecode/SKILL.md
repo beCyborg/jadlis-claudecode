@@ -146,6 +146,10 @@ sh "${CLAUDE_PLUGIN_ROOT}/scripts/apply-claude-home.sh"
   `codex exec`, блокирует опасные команды. Обойти — `# traps-ok` в команде.
 - `ste-ru-lint.py` после записи заметки в `~/Jadlis` показывает агенту до пяти фраз,
   которые нарушают правила письма из `CLAUDE.md`. Ничего не блокирует.
+- `cu-autoapprove-hook.sh` сам отвечает на окно «Computer Use wants to control these apps»:
+  разрешает приложение на сессию. Работает, только когда Claude Code запущен в tmux (`cld`).
+  Приложения, которые нельзя разрешать, — одна строка-регэксп в `~/.config/jadlis/cu-deny-apps`:
+  им скрипт отказывает.
 
 ## Шаг 6 — режим для читателя с СДВГ
 
