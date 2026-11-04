@@ -71,71 +71,16 @@ format_reset() {
   fi
 }
 
-# --- Fable weekly (per-model недельная квота — только в /api/oauth/usage) ---
-# Единственный fetcher — ~/.claude/scripts/claude-usage-fetch.sh: один кэш на аккаунт,
-# общий backoff/бюджет для statusline, тика снапшота и гейта ритуалов (эндпоинт банит
-# на час по 429). Здесь — только чтение кэша и дешёвая предпроверка (возраст + backoff),
-# сам запрос уходит в фон через `refresh`. Профиль резолвит fetcher (env), включая
-# ловушку CLAUDE_CONFIG_DIR=$HOME/.claude → default. Маркеры: ~ при возрасте > 1800 с,
-# ! при > 7200 с. Тест-хуки CUF_TEST_* — в fetcher.
-FETCHER="$HOME/.claude/scripts/claude-usage-fetch.sh"
-CUF_CACHE=""; CUF_BACKOFF=""; CUF_TAG=""
-[ -x "$FETCHER" ] && eval "$("$FETCHER" env --config-dir "${CLAUDE_CONFIG_DIR:-}" 2>/dev/null)"
-fable_part=""
-fable_age=999999
-if [ -n "$CUF_CACHE" ] && [ -s "$CUF_CACHE" ]; then
-  fable_fa=$(jq -r '.fetched_at // empty' "$CUF_CACHE" 2>/dev/null)
-  case "$fable_fa" in ''|*[!0-9]*) fable_fa=$(stat -f %m "$CUF_CACHE" 2>/dev/null || echo 0) ;; esac
-  fable_age=$(( now - fable_fa ))
-fi
-if [ -n "$CUF_CACHE" ] && [ "$fable_age" -ge 900 ]; then
-  fable_bo=$(cat "$CUF_BACKOFF" 2>/dev/null)
-  case "$fable_bo" in ''|*[!0-9]*) fable_bo=0 ;; esac
-  if [ "$now" -ge "$fable_bo" ]; then
-    "$FETCHER" refresh --config-dir "${CLAUDE_CONFIG_DIR:-}" --caller statusline --max-age 900 >/dev/null 2>&1 &
-  fi
-fi
-if [ -n "$CUF_CACHE" ] && [ -s "$CUF_CACHE" ]; then
-  fable_pct=$(jq -r '.fable.percent // empty' "$CUF_CACHE" 2>/dev/null)
-  if [ -n "$fable_pct" ]; then
-    fable_int=$(printf "%.0f" "$fable_pct")
-    fable_color=$(colorize "$fable_int")
-    fable_name=$(jq -r '.fable.scope.model.display_name // "Fable"' "$CUF_CACHE" 2>/dev/null)
-    fable_stale=""
-    [ "$fable_age" -gt 1800 ] && fable_stale="~"
-    [ "$fable_age" -gt 7200 ] && fable_stale="!"
-    fable_part="${fable_color}${fable_int}%${RESET}${fable_stale}(${CUF_TAG:+[$CUF_TAG] }${fable_name:-Fable})"
-  fi
-fi
-
+# --- Weekly limit only (5h window removed on the plan 2026-11; Fable display dropped) ---
 rl_part=""
-five_pct=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
 seven_pct=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
-
-if [ -n "$five_pct" ] && [ -n "$seven_pct" ]; then
-  five_int=$(printf "%.0f" "$five_pct")
+if [ -n "$seven_pct" ]; then
   seven_int=$(printf "%.0f" "$seven_pct")
-
-  five_reset=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // 0')
   seven_reset=$(echo "$input" | jq -r '.rate_limits.seven_day.resets_at // 0')
-
-  five_color=$(colorize "$five_int")
   seven_color=$(colorize "$seven_int")
-
-  five_time=$(format_reset "$five_reset")
   seven_time=$(format_reset "$seven_reset")
-
-  rl_part="${five_color}${five_int}%${RESET}(${five_time}) | ${seven_color}${seven_int}%${RESET}(${seven_time})"
+  rl_part="${seven_color}${seven_int}%${RESET}(${seven_time})"
 fi
-
-for extra in "$fable_part"; do
-  [ -z "$extra" ] && continue
-  if [ -n "$rl_part" ]; then
-    rl_part="${rl_part} | ${extra}"
-  else
-    rl_part="$extra"
-  fi
-done
 
 # --- Output ---
 ctx_part="${ctx_part}${model_part:+ $model_part}"

@@ -2,6 +2,45 @@
 
 Формат: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии — [SemVer](https://semver.org/lang/ru/).
 
+## [2.0.0] — 2026-11-04 — Три репо на GitHub / Three repos on GitHub
+
+### Для человека
+- Плагин переехал на GitHub: `becyb-org/jadlis-claudecode`. Ставится прямо оттуда, без
+  хаба: `claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git`,
+  затем `claude plugin install jadlis-claudecode@jadlis-claudecode`.
+- `CLAUDE.md`, `rules/` и стили ответа теперь живут в своих репо:
+  [jadlis-claude-md](https://github.com/becyb-org/jadlis-claude-md) и
+  [jadlis-output-styles](https://github.com/becyb-org/jadlis-output-styles). `/claudecode`
+  ставит их новым необязательным шагом 5. Файлы, которые поставила 1.x, остаются на месте.
+- `jadlis-notifications` больше не приезжает зависимостью. Поставь его явно:
+  `claude plugin install jadlis-notifications@jadlis`, иначе `claude plugin prune` его удалит.
+- В сетап вошёл переход в bypass после одобрения плана с телефона. Отдельный плагин
+  `jadlis-plan-bypass` рядом не ставь: хук сработает дважды.
+- Строка состояния показывает только недельный лимит.
+- Лицензия: Apache-2.0.
+
+### For agents
+- BREAKING: `assets/CLAUDE.md`, `assets/rules/`, `assets/output-styles/` removed;
+  `apply-claude-home.sh` no longer places them. They are exported by
+  `tools/export-owner.py --claude-md-repo DIR --styles-repo DIR` into the two new repos.
+- BREAKING: `plugin.json` drops `dependencies` (`jadlis-notifications ^1`); `homepage` and
+  `repository` → `https://github.com/becyb-org/jadlis-claudecode`; `license: Apache-2.0`.
+- Added: `.claude-plugin/marketplace.json` (marketplace `jadlis-claudecode`, source `./`).
+- Added: `assets/scripts/plan-bypass-hook.sh` + template hook `PostToolUse` `ExitPlanMode`
+  (`KEEP_HOOK_RE`); placed by `apply-claude-home.sh`, checked by `probe.sh` (`claude_scripts`).
+- Changed: `probe.sh` — `output_style` and `rules` are `PASS|WARN` (never FAIL), with an
+  `.info` hint pointing at the repo to install.
+- Changed: `apply-settings.sh` drops the template's `ste-ru-lint` hook unless
+  `$CLAUDE_HOME/CLAUDE.md` has a «Writing for people» section; prints `settings.lint_hook=`.
+- Changed: `SKILL.md` — 9 steps: new step 5 (clone + `install.sh --plan` of both repos),
+  notifications optional (step 8), plan-bypass hook explained in step 6.
+- Changed: `export-owner.py` — three targets, scanner skips `.git`/`node_modules`/`img` and
+  flags the owner's work project; drops the K02 staff-naming block from the rename hook.
+- Changed (owner export): statusline shows the weekly limit only; `Read`/`Edit` allow rules
+  without `(*)`.
+- CI: `.gitlab-ci.yml` → `.github/workflows/ci.yml` (validate --strict on CLI 2.1.263,
+  gitleaks full history, README parity, privacy grep; tools vendored in `tools/ci/`).
+
 ## [1.3.0] — 2026-11-02 — Автоподтверждение computer use / Computer-use auto-approve
 
 ### Для человека

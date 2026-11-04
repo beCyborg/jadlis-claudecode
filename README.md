@@ -3,13 +3,17 @@
 # Настроить Claude Code «как у него» — это два вечера в чужих конфигах, и всё равно получается не то
 
 `/claudecode` собирает рабочее место один в один: те же зависимости, тот же
-`~/.claude` — настройки, правила, стиль ответа, хуки, строка состояния, — тот же
-терминал с командой `cld` и вкладка, которая открывается сразу в рабочей папке.
+`~/.claude` — настройки, хуки, строка состояния, — тот же терминал с командами `cld` и
+`tld` и вкладка, которая открывается сразу в рабочей папке.
 
 ```
-claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
-claude plugin install jadlis-claudecode@jadlis
+claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git
+claude plugin install jadlis-claudecode@jadlis-claudecode
 ```
+
+`CLAUDE.md` и стили ответа живут в своих репо — [jadlis-claude-md](https://github.com/becyb-org/jadlis-claude-md)
+и [jadlis-output-styles](https://github.com/becyb-org/jadlis-output-styles). `/claudecode` ставит их
+отдельным шагом, если ты согласишься.
 
 Это первый и обязательный шаг маршрута Jadlis: остальные плагины исходят из того, что
 рабочее место уже собрано.
@@ -43,7 +47,7 @@ claude plugin install jadlis-claudecode@jadlis
 Текстом: проба → недостающие пакеты → терминал → папка → `~/.claude` → повторная проба →
 следующий шаг.
 
-Восемь шагов. Каждый сначала объясняет простым языком, что это и зачем, и только потом
+Девять шагов. Каждый сначала объясняет простым языком, что это и зачем, и только потом
 делает. Перед установкой и перед любой перезаписью — вопрос.
 
 1. **Проба.** `scripts/probe.sh`, таблица PASS/FAIL. Ничего не меняет и не ставит.
@@ -56,14 +60,19 @@ claude plugin install jadlis-claudecode@jadlis
    именем проекта (`repo`, `repo_2`, `repo_3`) и запускает в ней Claude Code.
 4. **Папка.** `~/Jadlis/Система/Планы`, `~/Jadlis/.claude/rules` и заметка о том, как
    тут принято работать: план → проверка → реализация.
-5. **`~/.claude` один в один.** Слияние `settings.json`, затем `CLAUDE.md`, `rules/`,
-   два стиля ответа (`jadlis.md` и `jadlis-voice.md`), четыре хука, `statusline-command.sh`,
-   четыре служебных скрипта и автоподтверждение computer use в tmux.
-6. **Режим для читателя с СДВГ.** Делать нечего: его задаёт `output-styles/jadlis.md`
+5. **Инструкции и стили — по желанию.** Скилл спрашивает, клонирует
+   [jadlis-claude-md](https://github.com/becyb-org/jadlis-claude-md) и
+   [jadlis-output-styles](https://github.com/becyb-org/jadlis-output-styles) во временную папку
+   и запускает их `install.sh --plan`, потом `install.sh`. Свой `CLAUDE.md` без «да» не заменяется.
+6. **`~/.claude` один в один.** Слияние `settings.json`, четыре хука, `statusline-command.sh`,
+   служебные скрипты, автоподтверждение computer use и переход в bypass после одобрения
+   плана с телефона.
+7. **Режим для читателя с СДВГ.** Делать нечего: его задаёт `output-styles/jadlis.md`
    из шага 5, а `outputStyle: "Jadlis"` включает его по умолчанию.
-7. **Уведомления.** `jadlis-notifications` приезжает сам как зависимость; остаётся один
-   ручной шаг — включить iTerm2 Python API, чтобы клик по уведомлению открывал вкладку.
-8. **Итог.** Повторная проба, список изменений и следующий шаг: новая вкладка iTerm2 →
+8. **Уведомления — по желанию.** `jadlis-notifications` ставится из маркетплейса `jadlis`
+   отдельной командой. Остаётся один ручной шаг — включить iTerm2 Python API, чтобы клик по
+   уведомлению открывал вкладку.
+9. **Итог.** Повторная проба, список изменений и следующий шаг: новая вкладка iTerm2 →
    `cld` → `/jadlis-hub`.
 
 Механическая часть вынесена в пять маленьких скриптов — `probe.sh`, `apply-settings.sh`,
@@ -77,21 +86,35 @@ claude plugin install jadlis-claudecode@jadlis
 | Кусок | Что именно |
 |---|---|
 | Зависимости | Homebrew, нативный `claude`, `git`, `jq`, `node`, `python@3.13`, `uv`, `poppler`, `tmux`, iTerm2, JetBrains Mono Nerd Font |
-| `~/.claude` | `settings.json`, `CLAUDE.md` с правилами письма, `rules/`, стили Jadlis и Jadlis Voice, четыре хука, строка состояния, четыре служебных скрипта, автоподтверждение computer use в tmux |
-| Терминал | `~/.tmux.conf`, динамический профиль iTerm2 «Jadlis», блок `.zshrc` с командой `cld` |
+| `~/.claude` | `settings.json`, четыре хука, строка состояния, служебные скрипты, автоподтверждение computer use в tmux, переход в bypass после одобрения плана с телефона |
+| Терминал | `~/.tmux.conf`, динамический профиль iTerm2 «Jadlis», блок `.zshrc` с командами `cld`, `tld` и `cc` |
 | Папка | каркас `~/Jadlis` и заметка «Приёмы работы — Claude Code» |
-| Уведомления | `jadlis-notifications` как зависимость плагина |
+| По желанию | `CLAUDE.md` с правилами письма и `rules/` из `jadlis-claude-md`, стили Jadlis и Jadlis Voice из `jadlis-output-styles`, плагин `jadlis-notifications` |
+
+Команды терминала:
+
+- `cld` открывает новую tmux-сессию с именем проекта (`repo`, `repo_2`, …) и запускает в ней
+  Claude Code. `cc` — то же самое.
+- `tld` без аргумента показывает все tmux-сессии с заголовками Claude Code, `tld <имя>`
+  переключает на сессию.
+- Автоподтверждение computer use: окно «Computer Use wants to control these apps» в сессии
+  внутри tmux подтверждается само.
+- Переход в bypass: план одобрили с телефона (Remote Control) — сессия сама уходит в bypass,
+  очищает контекст и начинает реализацию в чистом окне.
+
+**Не ставь рядом плагин `jadlis-plan-bypass`.** Его хук теперь входит в этот сетап. Если оба
+стоят, хук сработает дважды: `claude plugin uninstall jadlis-plan-bypass@jadlis`.
 
 ## Установка и первый запуск
 
 **а) Текст для вставки агенту.** Скопируй целиком в чат Claude Code:
 
 ```
-Ты — установщик. Поставь на этот Mac плагин jadlis-claudecode из маркетплейса jadlis.
+Ты — установщик. Поставь на этот Mac плагин jadlis-claudecode с GitHub.
 Ключей этому плагину не нужно, ничего секретного спрашивать не надо.
 Выполни ровно эти команды, дословно, ничего не сокращая:
-1. claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
-2. claude plugin install jadlis-claudecode@jadlis
+1. claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git
+2. claude plugin install jadlis-claudecode@jadlis-claudecode
 3. claude plugin list — покажи мне строку про jadlis-claudecode и его версию.
 Потом скажи мне одной строкой: набери /claudecode.
 Перед каждой командой покажи её мне целиком и дождись «да». Сказал «нет» — не выполняй,
@@ -102,13 +125,17 @@ claude plugin install jadlis-claudecode@jadlis
 **б) Команды руками.**
 
 ```
-claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
-claude plugin install jadlis-claudecode@jadlis
+claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git
+claude plugin install jadlis-claudecode@jadlis-claudecode
 claude plugin list
 ```
 
 Первая команда ничего не ставит — она добавляет маркетплейс. Ставит только вторая, и
-снимается она одной строкой: `claude plugin uninstall jadlis-claudecode@jadlis --keep-data`.
+снимается она одной строкой: `claude plugin uninstall jadlis-claudecode@jadlis-claudecode --keep-data`.
+
+Через общий маркетплейс Jadlis ставится тот же плагин:
+`claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git`, затем
+`claude plugin install jadlis-claudecode@jadlis`. Ставь одним из двух способов, не обоими.
 Полный HTTPS-URL обязателен: короткая форма `owner/repo` клонируется по SSH, а SSH-ключа
 у нового пользователя обычно нет.
 
@@ -160,22 +187,36 @@ Pro эта модель списывает usage-кредиты. Claude Code —
 Только macOS: на Intel-маке путь Homebrew другой (`/usr/local`) — это единственное известное
 отличие, но сам я на нём не проверял.
 
-**Условия использования.** Лицензии нет: все права сохранены за автором. Читать и
-пользоваться лично можно. Коммерческое использование, переиздание и включение в свои
-продукты — по договорённости со мной.
+**Автоподтверждение computer use подтверждает все приложения**, как у владельца: терминалы,
+Finder, «Системные настройки» тоже. Запреты — одна строка-регэксп в
+`~/.config/jadlis/cu-deny-apps`, подробности — `skills/claudecode/references/settings.md`.
+
+**Лицензия.** Apache-2.0, см. [LICENSE](LICENSE).
 
 **Обновление.** У стороннего маркетплейса авто-обновление на твоей стороне выключено:
 пока не запустишь первую команду, у тебя остаётся та версия, которую ты поставил.
 
 ```
-claude plugin marketplace update jadlis
-claude plugin update jadlis-claudecode@jadlis
+claude plugin marketplace update jadlis-claudecode
+claude plugin update jadlis-claudecode@jadlis-claudecode
 claude plugin list
 ```
+
+Ставил через маркетплейс Jadlis — те же команды с `jadlis` вместо `jadlis-claudecode`
+после `@` и в `marketplace update`.
+
+**Обновление с 1.x.** Версия 2.0.0 больше не ставит `CLAUDE.md`, `rules/` и стили, но и не
+удаляет их: файлы из 1.x остаются на месте. Уведомления `jadlis-notifications` раньше
+приезжали зависимостью — поставь их явно, иначе `claude plugin prune` их удалит:
+`claude plugin install jadlis-notifications@jadlis`.
+
+**Откат.** Скрипты ничего не удаляют. Перед каждой заменой они кладут старый файл рядом:
+`~/.claude/settings.json.bak-<дата>`, `~/.tmux.conf.bak-<дата>`, `<файл>.bak-<дата>` в
+`~/.claude/hooks` и `~/.claude/scripts`. Вернуть — скопировать `.bak` поверх файла.
 
 Переустановка, если что-то встало криво:
 
 ```
-claude plugin uninstall jadlis-claudecode@jadlis --keep-data
-claude plugin install jadlis-claudecode@jadlis
+claude plugin uninstall jadlis-claudecode@jadlis-claudecode --keep-data
+claude plugin install jadlis-claudecode@jadlis-claudecode
 ```

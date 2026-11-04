@@ -1,18 +1,22 @@
 #!/usr/bin/env python3
-"""export-owner.py — export the owner's Claude Code / terminal setup into plugin assets.
+"""export-owner.py — export the owner's Claude Code / terminal setup into three repos.
 
 Owner-side dev tool for jadlis-claudecode (lives in tools/ of that repo).
-Usage: python3 tools/export-owner.py [--out assets]
+Usage: python3 tools/export-owner.py [--out assets] [--claude-md-repo DIR] [--styles-repo DIR]
 
-Produces (under --out):
+Produces under --out (the jadlis-claudecode plugin):
   settings.template.json   ~/.claude/settings.json minus secrets, personal MCP, plugin state
+  hooks/                   session-start-title, rename-topic-from-prompt, _rename-apply, bash-traps.py
+  statusline-command.sh, scripts/: claude-usage-fetch.sh, tools-autoupdate.sh, ste-ru-lint.py, session-title.sh,
+                           cu-autoapprove.sh + cu-autoapprove-hook.sh (computer-use dialog auto-approve in tmux),
+                           plan-bypass-hook.sh (phone plan approval → bypass + clean context)
+Produces under --claude-md-repo (default ~/jadlis-claude-md):
   CLAUDE.md                global CLAUDE.md minus owner-only sections (Codex, permissions, dictation)
   rules/routing.md         routing without personal tools; operator agents → plugin commands
   rules/bash-gotchas.md    minus the owner's Keychain/profile-B bullets
-  output-styles/*.md       jadlis.md as is; jadlis-voice.md without the owner's play-button mod
-  hooks/                   session-start-title, rename-topic-from-prompt, _rename-apply, bash-traps.py
-  statusline-command.sh, scripts/: claude-usage-fetch.sh, tools-autoupdate.sh, ste-ru-lint.py, session-title.sh,
-                           cu-autoapprove.sh + cu-autoapprove-hook.sh (computer-use dialog auto-approve in tmux)
+  scripts/ste-ru-lint.py   the writing-rules linter CLAUDE.md points at (same file as in the plugin)
+Produces under --styles-repo (default ~/jadlis-output-styles):
+  jadlis.md as is; jadlis-voice.md without the owner's play-button mod
   tmux.conf                ~/.tmux.conf as is
   zshrc-jadlis.zsh         the cld + tld block on plain `claude` (no profile B, no spawner, no cldday)
   iterm2-profile.json      iTerm2 Dynamic Profile built from the owner's "Default" bookmark
@@ -38,7 +42,7 @@ PIN = {"model": "claude-opus-5-5"}
 # every answer — the template keeps the text style on and leaves Voice one /output-style away
 PIN["outputStyle"] = "Jadlis"
 # hooks the plugin ships; every other hook command in the owner's settings is his own infra
-KEEP_HOOK_RE = re.compile(r"session-start-title\.sh|rename-topic-from-prompt\.sh|bash-traps\.py|ste-ru-lint\.py|cu-autoapprove-hook\.sh")
+KEEP_HOOK_RE = re.compile(r"session-start-title\.sh|rename-topic-from-prompt\.sh|bash-traps\.py|ste-ru-lint\.py|cu-autoapprove-hook\.sh|plan-bypass-hook\.sh")
 # env variables whose NAME says the value is private (a host, a mailbox, any kind of key)
 ENV_DROP_RE = re.compile(r"(_API_KEY|_KEY|_TOKEN|_SECRET|_EMAIL|_MAILTO|_IP|_HOST)$")
 ENV_DROP: set[str] = set()
@@ -90,6 +94,24 @@ def fix(s: str) -> str:
         s = s.replace(k, v)
     return s
 
+
+
+def rename_hook(text: str) -> str:
+    """Drop the owner's K02 staff naming (tmux nt-* sessions) from rename-topic-from-prompt.sh."""
+    lines, out, skip = text.splitlines(), [], False
+    for l in lines:
+        if l.startswith("# Сотрудники NamedTop"):
+            skip = True
+        if skip:
+            if l == "}":
+                skip = False
+            continue
+        if l.strip().startswith("nt-*)"):
+            continue
+        out.append(l)
+    s = "\n".join(out) + "\n"
+    assert "namedtop" not in s.lower(), "rename hook still mentions NamedTop"
+    return s
 
 
 def settings_template(src: dict) -> dict:
@@ -233,6 +255,15 @@ def iterm_profile() -> dict:
     return {"Profiles": [prof]}
 
 
+SKIP_SCAN_DIRS = {".git", "node_modules", "__pycache__", "img"}   # same as the hub's privacy-grep.py
+
+
+def scan_tree(root: Path) -> list[str]:
+    return [h for p in root.rglob("*")
+            if p.is_file() and not SKIP_SCAN_DIRS.intersection(p.relative_to(root).parts)
+            for h in scan(p)]
+
+
 def scan(path: Path) -> list[str]:
     hits = []
     try:
@@ -246,43 +277,73 @@ def scan(path: Path) -> list[str]:
             hits.append(f"{path}:{i}: e-mail")
         if re.search(rf"(?<![A-Za-z]){re.escape(USER)}\b", l):
             hits.append(f"{path}:{i}: owner login name")
+        if re.search(r"namedtop|\bK02\b", l, re.I):
+            hits.append(f"{path}:{i}: owner's work project")
         if re.search(r"\bsk[_-][A-Za-z0-9]{8,}|\bghp_[A-Za-z0-9]{10,}", l):
             hits.append(f"{path}:{i}: key-like token")
     return hits
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(); ap.add_argument("--out", default="assets"); ap.add_argument("--settings"); a = ap.parse_args()
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default="assets")
+    ap.add_argument("--claude-md-repo", default=str(HOME / "jadlis-claude-md"))
+    ap.add_argument("--styles-repo", default=str(HOME / "jadlis-output-styles"))
+    ap.add_argument("--settings")
+    a = ap.parse_args()
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
+    md = Path(a.claude_md_repo).expanduser(); st = Path(a.styles_repo).expanduser()
+    for d in (md, st):
+        if not (d / ".git").is_dir():
+            print(f"export-owner.py: {d} is not a git repo — clone or init it first", file=sys.stderr)
+            return 2
+
+    # --- jadlis-claudecode: settings, hooks, scripts, terminal ---------------------------
     ap_settings = Path(a.settings) if a.settings else LIVE / "settings.json"
     (out / "settings.template.json").write_text(json.dumps(settings_template(json.loads(ap_settings.read_text())), ensure_ascii=False, indent=2) + "\n")
-    (out / "CLAUDE.md").write_text(claude_md((CC / "CLAUDE.md").read_text()))
-    (out / "rules").mkdir(exist_ok=True)
-    (out / "rules/routing.md").write_text(routing_md((CC / "rules/routing.md").read_text()))
-    (out / "rules/bash-gotchas.md").write_text(gotchas_md((CC / "rules/bash-gotchas.md").read_text()))
-    (out / "output-styles").mkdir(exist_ok=True)
-    shutil.copy(CC / "output-styles/jadlis.md", out / "output-styles/jadlis.md")
-    voice = (CC / "output-styles/jadlis-voice.md").read_text()
-    for k, v in VOICE_TEXT_FIX.items():
-        assert k in voice, f"jadlis-voice.md changed, VOICE_TEXT_FIX is stale: {k[:60]}"
-        voice = voice.replace(k, v)
-    (out / "output-styles/jadlis-voice.md").write_text(voice)
+    # instructions and styles moved to their own repos in 2.0.0 — never ship them here again
+    for old in ("CLAUDE.md", "rules", "output-styles"):
+        p = out / old
+        if p.is_dir():
+            shutil.rmtree(p)
+        elif p.exists():
+            p.unlink()
     (out / "hooks").mkdir(exist_ok=True)
-    for h in ("session-start-title.sh", "rename-topic-from-prompt.sh", "_rename-apply.sh", "bash-traps.py"):
+    for h in ("session-start-title.sh", "_rename-apply.sh", "bash-traps.py"):
         shutil.copy(CC / "hooks" / h, out / "hooks" / h)
+    rh = out / "hooks/rename-topic-from-prompt.sh"
+    rh.write_text(rename_hook((CC / "hooks/rename-topic-from-prompt.sh").read_text()))
+    rh.chmod(0o755)
     shutil.copy(CC / "statusline-command.sh", out / "statusline-command.sh")
     (out / "scripts").mkdir(exist_ok=True)
-    for sc in ("claude-usage-fetch.sh", "tools-autoupdate.sh", "ste-ru-lint.py", "cu-autoapprove.sh", "cu-autoapprove-hook.sh"):
+    for sc in ("claude-usage-fetch.sh", "tools-autoupdate.sh", "ste-ru-lint.py", "cu-autoapprove.sh", "cu-autoapprove-hook.sh", "plan-bypass-hook.sh"):
         shutil.copy(CC / "scripts" / sc, out / "scripts" / sc)
     # headless session namer called by rename-topic-from-prompt.sh; its PATH and claude binary are absolute
     (out / "scripts/session-title.sh").write_text((CC / "scripts/session-title.sh").read_text().replace(str(HOME), "$HOME"))
     shutil.copy(HOME / ".tmux.conf", out / "tmux.conf")
     (out / "zshrc-jadlis.zsh").write_text(zshrc_block((HOME / ".zshrc").read_text()))
     (out / "iterm2-profile.json").write_text(json.dumps(iterm_profile(), ensure_ascii=False, indent=2) + "\n")
-    hits = [h for p in out.rglob("*") if p.is_file() for h in scan(p)]
+
+    # --- jadlis-claude-md: instructions, rules, the linter they point at --------------------
+    (md / "CLAUDE.md").write_text(claude_md((CC / "CLAUDE.md").read_text()))
+    (md / "rules").mkdir(exist_ok=True)
+    (md / "rules/routing.md").write_text(routing_md((CC / "rules/routing.md").read_text()))
+    (md / "rules/bash-gotchas.md").write_text(gotchas_md((CC / "rules/bash-gotchas.md").read_text()))
+    (md / "scripts").mkdir(exist_ok=True)
+    shutil.copy(CC / "scripts/ste-ru-lint.py", md / "scripts/ste-ru-lint.py")
+
+    # --- jadlis-output-styles: both styles, Voice without the owner's play-button mod ------
+    shutil.copy(CC / "output-styles/jadlis.md", st / "jadlis.md")
+    voice = (CC / "output-styles/jadlis-voice.md").read_text()
+    for k, v in VOICE_TEXT_FIX.items():
+        assert k in voice, f"jadlis-voice.md changed, VOICE_TEXT_FIX is stale: {k[:60]}"
+        voice = voice.replace(k, v)
+    (st / "jadlis-voice.md").write_text(voice)
+
+    hits = [h for root in (out, md, st) for h in scan_tree(root)]
     for h in hits:
         print("HIT", h)
-    print(f"exported to {out}; {len(hits)} privacy hits")
+    print(f"exported to {out}, {md}, {st}; {len(hits)} privacy hits")
     return 1 if hits else 0
 
 

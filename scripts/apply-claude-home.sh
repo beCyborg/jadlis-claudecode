@@ -1,9 +1,11 @@
 #!/bin/sh
 # apply-claude-home.sh — copy the owner's ~/.claude files into the recipient's $HOME/.claude.
 #
-# Copies: CLAUDE.md, rules/*.md, output-styles/{jadlis,jadlis-voice}.md, hooks/* (chmod +x),
-#         statusline-command.sh (chmod +x), scripts/* (chmod +x; incl. the computer-use auto-approve pair).
+# Copies: hooks/* (chmod +x), statusline-command.sh (chmod +x), scripts/* (chmod +x; incl. the
+#         computer-use auto-approve pair and the plan-bypass hook).
 # settings.json is NOT touched here — that is apply-settings.sh (it merges, it does not copy).
+# CLAUDE.md, rules/ and the output styles are NOT shipped since 2.0.0 — they live in the repos
+# jadlis-claude-md and jadlis-output-styles, each with its own install.sh.
 #
 # A file that already exists and differs is left alone and reported as DIFFERS; --force
 # overwrites it after a backup. So a second run changes nothing.
@@ -55,21 +57,16 @@ place() {   # $1 source, $2 destination relative to $CLAUDE_HOME, $3 exec (1|0)
 }
 
 if [ "$MODE" != plan ]; then
-	mkdir -p "$CLAUDE_HOME/hooks" "$CLAUDE_HOME/rules" "$CLAUDE_HOME/output-styles" "$CLAUDE_HOME/scripts"
+	mkdir -p "$CLAUDE_HOME/hooks" "$CLAUDE_HOME/scripts"
 fi
 
-place CLAUDE.md                CLAUDE.md                    0
-place rules/routing.md         rules/routing.md             0
-place rules/bash-gotchas.md    rules/bash-gotchas.md        0
-place output-styles/jadlis.md  output-styles/jadlis.md      0
-place output-styles/jadlis-voice.md output-styles/jadlis-voice.md 0
 place statusline-command.sh    statusline-command.sh        1
 
 for h in session-start-title.sh rename-topic-from-prompt.sh _rename-apply.sh bash-traps.py; do
 	place "hooks/$h" "hooks/$h" 1
 done
 
-for s in claude-usage-fetch.sh tools-autoupdate.sh ste-ru-lint.py session-title.sh cu-autoapprove.sh cu-autoapprove-hook.sh; do
+for s in claude-usage-fetch.sh tools-autoupdate.sh ste-ru-lint.py session-title.sh cu-autoapprove.sh cu-autoapprove-hook.sh plan-bypass-hook.sh; do
 	place "scripts/$s" "scripts/$s" 1
 done
 

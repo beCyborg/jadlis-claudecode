@@ -24,7 +24,7 @@
 | `permissions.defaultMode` | `bypassPermissions` | агент выполняет команды и правит файлы без вопроса каждый раз |
 | `effortLevel` | `high` | больше усилий на ответ; недельная квота расходуется быстрее |
 | `modelSettings` | `claude-opus-5-5`: `high` | для Opus 5.5 этот уровень главнее общего `effortLevel`. `xhigh` на всю сессию не ставится: его получают точечно, в настройках самого агента, только одиночные агенты в конце цепочки (анализ и синтез, валидаторы, критики) и операторы браузера и рабочего стола. Разово поднять уровень — `/effort`, выбрать `xhigh`, клавиша `s`; `Enter` или `/effort xhigh` сохраняют его как умолчание |
-| `outputStyle` | `Jadlis` | стиль ответа для читателя с СДВГ, включён по умолчанию |
+| `outputStyle` | `Jadlis` | стиль ответа для читателя с СДВГ, включён по умолчанию. Сам файл стиля ставит репо `jadlis-output-styles` (шаг 5); без файла Claude Code молча работает в стиле Default |
 | `language` | `Russian` | язык ответов и имён сессий |
 | `autoMemoryEnabled` | `true` | память переживает перезапуск сессии, лежит в `~/.claude/memory` |
 | `DISABLE_AUTOUPDATER` | `1` | встроенный автообновлятор выключен, обновляет `tools-autoupdate.sh` |
@@ -37,21 +37,17 @@
 
 | Файл | Что делает |
 |---|---|
-| `CLAUDE.md` | глобальные правила: как понять задачу и довести её до проверки, язык, правила письма для людей (STE-RU), форма планов, маршрутизация, память |
-| `rules/routing.md` | какой инструмент под какую задачу; читается каждую сессию |
-| `rules/bash-gotchas.md` | грабли, которые срабатывают при сборке команды, а не при чтении файла |
-| `output-styles/jadlis.md` | стиль ответа: сначала результат, спорить, а не поддакивать |
-| `output-styles/jadlis-voice.md` | ответ Jadlis на экране плюс блок «🔊 Голосом» в конце: пересказ для слуха живым диалогом, без разметки, с тегами эмоций Eleven v4 |
 | `hooks/session-start-title.sh` | подписывает вкладку терминала «`<папка> · HH:MM`», без сети |
 | `hooks/rename-topic-from-prompt.sh` | смысловое имя сессии по первому промпту, плану или `/goal` |
 | `hooks/_rename-apply.sh` | переименовывает окно tmux |
-| `hooks/bash-traps.py` | перед командой Bash чинит или блокирует известные ловушки из `rules/bash-gotchas.md`; лог `~/.claude/logs/bash-traps.log` |
+| `hooks/bash-traps.py` | перед командой Bash чинит или блокирует известные ловушки (их список — `rules/bash-gotchas.md` из `jadlis-claude-md`); лог `~/.claude/logs/bash-traps.log` |
 | `statusline-command.sh` | строка состояния; зовёт `scripts/claude-usage-fetch.sh` |
 | `scripts/claude-usage-fetch.sh` | единственный, кому можно спрашивать квоту у API: общий кэш и backoff |
 | `scripts/tools-autoupdate.sh` | фоновое обновление `claude` и `codex` не чаще раза в 6 часов |
 | `scripts/ste-ru-lint.py` | проверка текста по правилам письма; вручную — `uv run -q --with pymorphy3 python ~/.claude/scripts/ste-ru-lint.py <file.md>`, хуком — после записи заметки в `~/Jadlis` |
 | `scripts/cu-autoapprove-hook.sh` | хук перед каждым вызовом computer use: запускает наблюдателя за панелью tmux этой сессии |
 | `scripts/cu-autoapprove.sh` | наблюдатель: видит окно «Computer Use wants to control these apps» и нажимает «Allow for this session»; приложениям из `~/.config/jadlis/cu-deny-apps` отказывает (Esc); лог `~/.claude/logs/cu-autoapprove.log` |
+| `scripts/plan-bypass-hook.sh` | хук после `ExitPlanMode`: план одобрили с телефона и сессия в auto mode — переключает в bypass, очищает контекст и запускает реализацию в чистом окне; только в tmux; лог `~/.claude/logs/plan-bypass.log` |
 | `scripts/session-title.sh` | имя сессии через `claude -p` (Sonnet 5.5) для промпта с файлом, плана или скилла |
 
 ## Хуки: что важно знать получателю

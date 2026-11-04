@@ -3,13 +3,17 @@ English · [Русский](README.md)
 # Setting up Claude Code "the way he has it" takes two evenings inside someone else's configs, and it still comes out wrong
 
 `/claudecode` builds the workbench one to one: the same dependencies, the same
-`~/.claude` — settings, rules, answer style, hooks, status line — the same terminal with
-the `cld` command and a tab that opens straight in the working folder.
+`~/.claude` — settings, hooks, status line — the same terminal with the `cld` and `tld`
+commands and a tab that opens straight in the working folder.
 
 ```
-claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
-claude plugin install jadlis-claudecode@jadlis
+claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git
+claude plugin install jadlis-claudecode@jadlis-claudecode
 ```
+
+`CLAUDE.md` and the answer styles live in their own repos — [jadlis-claude-md](https://github.com/becyb-org/jadlis-claude-md)
+and [jadlis-output-styles](https://github.com/becyb-org/jadlis-output-styles). `/claudecode` installs
+them as a separate step if you agree.
 
 This is the first and mandatory step of the Jadlis route: every other plugin assumes the
 workbench is already there.
@@ -43,7 +47,7 @@ Coming out — the assembled workbench and the list of what changed.
 In words: probe → missing packages → terminal → folder → `~/.claude` → the probe again →
 next step.
 
-Eight steps. Each one first explains in plain language what it is and why, and only then
+Nine steps. Each one first explains in plain language what it is and why, and only then
 acts. Before an install and before any overwrite — a question.
 
 1. **Probe.** `scripts/probe.sh`, a PASS/FAIL table. Changes nothing, installs nothing.
@@ -56,15 +60,19 @@ acts. Before an install and before any overwrite — a question.
    session named after the project (`repo`, `repo_2`, `repo_3`) and runs Claude Code in it.
 4. **The folder.** `~/Jadlis/Система/Планы`, `~/Jadlis/.claude/rules` and a note on how
    work is done here: plan → verification → implementation.
-5. **`~/.claude` one to one.** The `settings.json` merge, then `CLAUDE.md`, `rules/`,
-   two answer styles (`jadlis.md` and `jadlis-voice.md`), four hooks, `statusline-command.sh`,
-   four helper scripts and computer-use auto-approve in tmux.
-6. **The mode for a reader with ADHD.** Nothing to do: `output-styles/jadlis.md` from
+5. **Instructions and styles — optional.** The skill asks, clones
+   [jadlis-claude-md](https://github.com/becyb-org/jadlis-claude-md) and
+   [jadlis-output-styles](https://github.com/becyb-org/jadlis-output-styles) into a temporary folder
+   and runs their `install.sh --plan`, then `install.sh`. Your own `CLAUDE.md` is not replaced without a "yes".
+6. **`~/.claude` one to one.** The `settings.json` merge, four hooks, `statusline-command.sh`,
+   helper scripts, computer-use auto-approve and the switch to bypass after a plan is
+   approved from the phone.
+7. **The mode for a reader with ADHD.** Nothing to do: `output-styles/jadlis.md` from
    step 5 defines it, and `outputStyle: "Jadlis"` turns it on by default.
-7. **Notifications.** `jadlis-notifications` arrives on its own as a dependency; one
-   manual step is left — enable the iTerm2 Python API so a click on a notification
-   opens the right tab.
-8. **The wrap-up.** The probe again, the list of changes and the next step: a new iTerm2
+8. **Notifications — optional.** `jadlis-notifications` installs from the `jadlis`
+   marketplace with a separate command. One manual step is left — enable the iTerm2 Python
+   API so a click on a notification opens the right tab.
+9. **The wrap-up.** The probe again, the list of changes and the next step: a new iTerm2
    tab → `cld` → `/jadlis-hub`.
 
 The mechanical part sits in five small scripts — `probe.sh`, `apply-settings.sh`,
@@ -77,21 +85,35 @@ What lands in the end:
 | Piece | What exactly |
 |---|---|
 | Dependencies | Homebrew, native `claude`, `git`, `jq`, `node`, `python@3.13`, `uv`, `poppler`, `tmux`, iTerm2, JetBrains Mono Nerd Font |
-| `~/.claude` | `settings.json`, `CLAUDE.md` with the writing rules, `rules/`, the Jadlis and Jadlis Voice styles, four hooks, the status line, four helper scripts, computer-use auto-approve in tmux |
-| Terminal | `~/.tmux.conf`, the "Jadlis" iTerm2 dynamic profile, the `.zshrc` block with `cld` |
+| `~/.claude` | `settings.json`, four hooks, the status line, helper scripts, computer-use auto-approve in tmux, the switch to bypass after a plan is approved from the phone |
+| Terminal | `~/.tmux.conf`, the "Jadlis" iTerm2 dynamic profile, the `.zshrc` block with `cld`, `tld` and `cc` |
 | Folder | the `~/Jadlis` skeleton and the note "Приёмы работы — Claude Code" |
-| Notifications | `jadlis-notifications` as a plugin dependency |
+| Optional | `CLAUDE.md` with the writing rules and `rules/` from `jadlis-claude-md`, the Jadlis and Jadlis Voice styles from `jadlis-output-styles`, the `jadlis-notifications` plugin |
+
+Terminal commands:
+
+- `cld` opens a new tmux session named after the project (`repo`, `repo_2`, …) and runs
+  Claude Code in it. `cc` is the same.
+- `tld` with no argument lists all tmux sessions with their Claude Code titles; `tld <name>`
+  switches to a session.
+- Computer-use auto-approve: the "Computer Use wants to control these apps" dialog in a
+  session inside tmux is confirmed on its own.
+- Switch to bypass: a plan approved from the phone (Remote Control) makes the session go to
+  bypass, clear the context and start the implementation in a clean window.
+
+**Do not install the `jadlis-plan-bypass` plugin next to it.** Its hook is now part of this
+setup. With both installed, the hook fires twice: `claude plugin uninstall jadlis-plan-bypass@jadlis`.
 
 ## Installing and the first run
 
 **a) Text to paste to an agent.** Copy the whole thing into a Claude Code chat:
 
 ```
-You are the installer. Install the plugin jadlis-claudecode from the jadlis marketplace
-on this Mac. This plugin needs no keys, so ask me for nothing secret.
+You are the installer. Install the plugin jadlis-claudecode from GitHub on this Mac.
+This plugin needs no keys, so ask me for nothing secret.
 Run exactly these commands, verbatim, shortening nothing:
-1. claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
-2. claude plugin install jadlis-claudecode@jadlis
+1. claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git
+2. claude plugin install jadlis-claudecode@jadlis-claudecode
 3. claude plugin list — show me the line about jadlis-claudecode and its version.
 After that tell me in one line: type /claudecode.
 Before each command show it to me in full and wait for "yes". If I say "no", do not run
@@ -102,14 +124,18 @@ If a command returns an error, stop, show me the output, and do not move to the 
 **b) Commands by hand.**
 
 ```
-claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
-claude plugin install jadlis-claudecode@jadlis
+claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git
+claude plugin install jadlis-claudecode@jadlis-claudecode
 claude plugin list
 ```
 
 The first command installs nothing — it adds the marketplace. Only the second one
 installs, and one line removes it:
-`claude plugin uninstall jadlis-claudecode@jadlis --keep-data`. The full HTTPS URL is
+`claude plugin uninstall jadlis-claudecode@jadlis-claudecode --keep-data`.
+
+The shared Jadlis marketplace installs the same plugin:
+`claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git`, then
+`claude plugin install jadlis-claudecode@jadlis`. Use one of the two ways, not both. The full HTTPS URL is
 required: the short `owner/repo` form clones over SSH, and a new user usually has no SSH key.
 
 **c) The short command.** Open Claude Code and type:
@@ -163,22 +189,36 @@ weekly quota faster.
 on an Intel Mac the Homebrew path differs (`/usr/local`) — the only known difference, and one
 I have not tested myself.
 
-**Terms of use.** There is no license: all rights reserved by the author. You may read it
-and use it personally. Commercial use, republishing and bundling it into your own
-products — by arrangement with me.
+**Computer-use auto-approve confirms every app**, as on the owner's Mac: terminals,
+Finder and System Settings too. Deny list — one regex line in `~/.config/jadlis/cu-deny-apps`,
+details in `skills/claudecode/references/settings.md`.
+
+**License.** Apache-2.0, see [LICENSE](LICENSE).
 
 **Updating.** With a third-party marketplace, auto-update is off on your side: until you
 run the first command you keep the version you installed.
 
 ```
-claude plugin marketplace update jadlis
-claude plugin update jadlis-claudecode@jadlis
+claude plugin marketplace update jadlis-claudecode
+claude plugin update jadlis-claudecode@jadlis-claudecode
 claude plugin list
 ```
+
+Installed through the Jadlis marketplace — the same commands with `jadlis` instead of
+`jadlis-claudecode` after `@` and in `marketplace update`.
+
+**Updating from 1.x.** Version 2.0.0 no longer installs `CLAUDE.md`, `rules/` and the styles,
+but does not remove them either: the files from 1.x stay in place. `jadlis-notifications`
+used to arrive as a dependency — install it explicitly, or `claude plugin prune` removes it:
+`claude plugin install jadlis-notifications@jadlis`.
+
+**Rollback.** The scripts delete nothing. Before each replacement they keep the old file next
+to it: `~/.claude/settings.json.bak-<date>`, `~/.tmux.conf.bak-<date>`, `<file>.bak-<date>` in
+`~/.claude/hooks` and `~/.claude/scripts`. To roll back, copy the `.bak` over the file.
 
 A reinstall, if something landed crooked:
 
 ```
-claude plugin uninstall jadlis-claudecode@jadlis --keep-data
-claude plugin install jadlis-claudecode@jadlis
+claude plugin uninstall jadlis-claudecode@jadlis-claudecode --keep-data
+claude plugin install jadlis-claudecode@jadlis-claudecode
 ```

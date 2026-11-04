@@ -68,8 +68,8 @@
       "Bash(sort *)",
       "Bash(stat *)",
       "Bash(curl *)",
-      "Edit(*)",
-      "Read(*)",
+      "Edit",
+      "Read",
       "Skill(*)",
       "mcp__plugin_jadlis-search_reddit__*",
       "mcp__plugin_github_github__*",
@@ -149,6 +149,16 @@
       }
     ],
     "PostToolUse": [
+      {
+        "matcher": "ExitPlanMode",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/plan-bypass-hook.sh",
+            "timeout": 20
+          }
+        ]
+      },
       {
         "matcher": "Write|Edit|MultiEdit",
         "hooks": [

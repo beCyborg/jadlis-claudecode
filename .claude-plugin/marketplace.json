@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "jadlis-claudecode",
+  "owner": {
+    "name": "Be Cyborg"
+  },
+  "metadata": {
+    "description": "Один плагин: jadlis-claudecode — Claude Code и терминал один в один с рабочим местом владельца."
+  },
+  "plugins": [
+    {
+      "name": "jadlis-claudecode",
+      "source": "./",
+      "description": "Первый шаг маршрута Jadlis: собирает Claude Code и терминал один в один с машиной владельца — зависимости, слияние ~/.claude/settings.json, хуки, строка состояния, tmux, динамический профиль iTerm2, команды cld и tld, автоподтверждение computer use и переход в bypass после одобрения плана с телефона. CLAUDE.md и стили ответа ставятся отдельным шагом из своих репо.",
+      "version": "2.0.0",
+      "category": "productivity",
+      "homepage": "https://github.com/becyb-org/jadlis-claudecode",
+      "license": "Apache-2.0"
+    }
+  ]
+}

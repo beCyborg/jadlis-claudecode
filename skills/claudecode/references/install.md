@@ -24,9 +24,9 @@
 | `settings_merged` | `~/.claude/settings.json` | настройки владельца слиты в файл получателя |
 | `hooks` | четыре хука в `~/.claude/hooks` | имя сессии, заголовок вкладки, ловушки Bash |
 | `statusline` | `~/.claude/statusline-command.sh` | папка, контекст, модель, лимиты в строке состояния |
-| `output_style` | `~/.claude/output-styles/jadlis.md` и `jadlis-voice.md` | стиль ответа для читателя с СДВГ, текстом и вслух |
-| `rules` | `~/.claude/rules/*.md` | маршрутизация инструментов и гоча Bash |
-| `claude_scripts` | `~/.claude/scripts/*` | обновление CLI, квота для строки состояния, проверка текста, имя сессии |
+| `output_style` | `~/.claude/output-styles/jadlis.md` | стиль ответа для читателя с СДВГ; ставит репо `jadlis-output-styles` (шаг 5), без него `WARN` |
+| `rules` | `~/.claude/CLAUDE.md` и `rules/bash-gotchas.md` | глобальные инструкции и ловушки Bash; ставит репо `jadlis-claude-md` (шаг 5), без него `WARN` |
+| `claude_scripts` | `~/.claude/scripts/*` | обновление CLI, квота для строки состояния, проверка текста, имя сессии, автоподтверждение computer use, переход в bypass после плана |
 | `jadlis_dir` | `~/Jadlis` | рабочая папка терминала и место для заметок |
 
 ## Установка

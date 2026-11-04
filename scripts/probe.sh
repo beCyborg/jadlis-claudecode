@@ -3,6 +3,7 @@
 #
 # Prints a machine-readable list, one `key=value` per line:
 #   <check>=PASS|FAIL          — the check itself
+#   <check>=PASS|WARN          — an optional part from another repo (never FAIL)
 #   <check>.info=<text>        — version or path, only when known
 # The hub and the /claudecode skill both parse this; keep the key names stable.
 #
@@ -97,11 +98,24 @@ done
 say hooks "$hooks_ok"
 
 [ -x "$CLAUDE_HOME/statusline-command.sh" ] && say statusline PASS || say statusline FAIL
-[ -f "$CLAUDE_HOME/output-styles/jadlis.md" ] && [ -f "$CLAUDE_HOME/output-styles/jadlis-voice.md" ] && say output_style PASS || say output_style FAIL
-[ -f "$CLAUDE_HOME/rules/routing.md" ] && say rules PASS || say rules FAIL
+# The styles and CLAUDE.md come from their own repos (optional step of /claudecode).
+# settings.json names the style "Jadlis" either way; without the file Claude Code falls back
+# to Default silently, so a missing file is a hint, not a failure.
+if [ -f "$CLAUDE_HOME/output-styles/jadlis.md" ]; then
+	say output_style PASS
+else
+	say output_style WARN
+	info output_style "no output-styles/jadlis.md — install https://github.com/becyb-org/jadlis-output-styles"
+fi
+if [ -f "$CLAUDE_HOME/CLAUDE.md" ] && [ -f "$CLAUDE_HOME/rules/bash-gotchas.md" ]; then
+	say rules PASS
+else
+	say rules WARN
+	info rules "no CLAUDE.md or rules/ — install https://github.com/becyb-org/jadlis-claude-md"
+fi
 
 scripts_ok=PASS
-for s in claude-usage-fetch.sh tools-autoupdate.sh ste-ru-lint.py session-title.sh cu-autoapprove.sh cu-autoapprove-hook.sh; do
+for s in claude-usage-fetch.sh tools-autoupdate.sh ste-ru-lint.py session-title.sh cu-autoapprove.sh cu-autoapprove-hook.sh plan-bypass-hook.sh; do
 	[ -x "$CLAUDE_HOME/scripts/$s" ] || scripts_ok=FAIL
 done
 say claude_scripts "$scripts_ok"

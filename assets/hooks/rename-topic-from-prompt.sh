@@ -400,7 +400,8 @@ gen_title() {
 # если имя уже съехало — возвращаем. (2026-09-20; пульт A убран 30.09.2026)
 if [ -n "$TMUX" ]; then
   _tmux=$(command -v tmux 2>/dev/null || echo /opt/homebrew/bin/tmux)
-  case "$("$_tmux" display-message -p ${TMUX_PANE:+-t "$TMUX_PANE"} '#S' 2>/dev/null)" in
+  _sess=$("$_tmux" display-message -p ${TMUX_PANE:+-t "$TMUX_PANE"} '#S' 2>/dev/null)
+  case "$_sess" in
     jadlis-manager-B) MGR_TITLE='Менеджер сессии B' ;;
     *)                MGR_TITLE='' ;;
   esac

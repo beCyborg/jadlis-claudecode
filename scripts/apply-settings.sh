@@ -8,7 +8,10 @@
 #     and `pluginConfigs` — the template never mentions them;
 #   * `env` merges key by key (deep `*`), so the recipient's own variables stay;
 #   * `permissions.allow` and `permissions.deny` are unioned, not replaced — replacing
-#     `deny` would silently widen permissions the recipient had narrowed on purpose.
+#     `deny` would silently widen permissions the recipient had narrowed on purpose;
+#   * the ste-ru-lint hook (PostToolUse Write|Edit) goes in only when the recipient's CLAUDE.md
+#     has a «Writing for people» section — the linter checks exactly those rules. Without it the
+#     template's lint hook is dropped; run again after installing jadlis-claude-md to add it.
 #
 # Usage:
 #   apply-settings.sh              apply (backup kept next to the file)
@@ -50,9 +53,19 @@ else
 	echo '{}' > "$CUR"
 fi
 
-jq -s '
+LINT=false
+if [ -f "$CLAUDE_HOME/CLAUDE.md" ] && grep -q 'Writing for people' "$CLAUDE_HOME/CLAUDE.md"; then
+	LINT=true
+fi
+
+jq -s --argjson lint "$LINT" '
 	def uniqarr(a; b): (((a // []) + (b // [])) | unique);
-	.[0] as $cur | .[1] as $tpl
+	def nolint: if .hooks.PostToolUse then
+			.hooks.PostToolUse |= (map(.hooks |= map(select((.command // "") | test("ste-ru-lint") | not)))
+			                       | map(select((.hooks | length) > 0)))
+			| (if (.hooks.PostToolUse | length) == 0 then del(.hooks.PostToolUse) else . end)
+		else . end;
+	.[0] as $cur | (.[1] | if $lint then . else nolint end) as $tpl
 	| ($cur * $tpl)
 	| uniqarr($cur.permissions.allow; $tpl.permissions.allow) as $allow
 	| uniqarr($cur.permissions.deny;  $tpl.permissions.deny)  as $deny
@@ -93,4 +106,5 @@ else
 fi
 
 jq -e . "$CFG" >/dev/null && printf 'settings.model=%s\n' "$(jq -r '.model // "?"' "$CFG")"
+printf 'settings.lint_hook=%s\n' "$LINT"
 exit 0
