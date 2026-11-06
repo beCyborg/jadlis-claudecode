@@ -112,7 +112,7 @@ mkdir -p "$HOME/Jadlis/Система/Планы" "$HOME/Jadlis/.claude/rules"
 
 Что это: глобальный `CLAUDE.md` (как агент понимает задачу, проверяет результат и пишет
 для людей), правила `rules/` и два стиля ответа — Jadlis и Jadlis Voice. Они живут в двух
-отдельных репо на GitHub: `becyb-org/jadlis-claude-md` и `becyb-org/jadlis-output-styles`.
+отдельных репо на GitHub: `beCyborg/jadlis-claude-md` и `beCyborg/jadlis-output-styles`.
 Плагин их не везёт, но может поставить.
 
 Спроси одним `AskUserQuestion`, два вопроса: «Ставим CLAUDE.md и правила?» и «Ставим стили
@@ -124,8 +124,8 @@ mkdir -p "$HOME/Jadlis/Система/Планы" "$HOME/Jadlis/.claude/rules"
 
 ```bash
 D="${TMPDIR:-/tmp}/jadlis-repos"; rm -rf "$D"; mkdir -p "$D"
-git clone -q --depth 1 https://github.com/becyb-org/jadlis-claude-md.git "$D/jadlis-claude-md"
-git clone -q --depth 1 https://github.com/becyb-org/jadlis-output-styles.git "$D/jadlis-output-styles"
+git clone -q --depth 1 https://github.com/beCyborg/jadlis-claude-md.git "$D/jadlis-claude-md"
+git clone -q --depth 1 https://github.com/beCyborg/jadlis-output-styles.git "$D/jadlis-output-styles"
 sh "$D/jadlis-claude-md/install.sh" --plan
 sh "$D/jadlis-output-styles/install.sh" --plan
 ```
@@ -226,7 +226,7 @@ claude plugin list 2>/dev/null | grep -i notifications || echo "не устан�
 маркетплейса `jadlis` ещё нет в `claude plugin marketplace list`):
 
 ```bash
-claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git
+claude plugin marketplace add https://github.com/beCyborg/jadlis-hub.git
 claude plugin install jadlis-notifications@jadlis
 ```
 

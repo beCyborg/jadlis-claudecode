@@ -105,13 +105,13 @@ if [ -f "$CLAUDE_HOME/output-styles/jadlis.md" ]; then
 	say output_style PASS
 else
 	say output_style WARN
-	info output_style "no output-styles/jadlis.md — install https://github.com/becyb-org/jadlis-output-styles"
+	info output_style "no output-styles/jadlis.md — install https://github.com/beCyborg/jadlis-output-styles"
 fi
 if [ -f "$CLAUDE_HOME/CLAUDE.md" ] && [ -f "$CLAUDE_HOME/rules/bash-gotchas.md" ]; then
 	say rules PASS
 else
 	say rules WARN
-	info rules "no CLAUDE.md or rules/ — install https://github.com/becyb-org/jadlis-claude-md"
+	info rules "no CLAUDE.md or rules/ — install https://github.com/beCyborg/jadlis-claude-md"
 fi
 
 scripts_ok=PASS

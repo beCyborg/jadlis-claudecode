@@ -1,6 +1,6 @@
 # CI for jadlis-claudecode: plugin validate --strict, gitleaks over the full history,
 # README parity and privacy grep. Port of the hub's reusable plugin-ci.yml (2026-11-04 move
-# to GitHub becyb-org); the two doc tools are vendored in tools/ci/ so the repo stands alone.
+# to GitHub; beCyborg since 2026-11-06); the two doc tools are vendored in tools/ci/ so the repo stands alone.
 name: ci
 
 on:

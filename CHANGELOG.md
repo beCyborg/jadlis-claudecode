@@ -2,6 +2,19 @@
 
 Формат: [Keep a Changelog](https://keepachangelog.com/ru/1.1.0/), версии — [SemVer](https://semver.org/lang/ru/).
 
+## [2.0.1] — 2026-11-06 — репозиторий снова на GitHub beCyborg / repository back on GitHub beCyborg
+
+### Для человека
+
+- Плагин снова живёт на GitHub: https://github.com/beCyborg/jadlis-claudecode. Каталог ставится командой `claude plugin marketplace add https://github.com/beCyborg/jadlis-hub.git`.
+- Работа плагина не изменилась, поменялись только адреса.
+
+### For agents
+
+- Changed: `skills/claudecode/SKILL.md`, `scripts/probe.sh` — instructions and styles are cloned from `github.com/beCyborg/jadlis-claude-md` and `github.com/beCyborg/jadlis-output-styles`; the hub URL is `https://github.com/beCyborg/jadlis-hub.git`.
+- Changed: README pair, `docs/tier/README*.md`, `.claude-plugin/plugin.json`, `.claude-plugin/marketplace.json` — becyb-org/GitLab → `github.com/beCyborg`.
+- Changed: `.claude-plugin/plugin.json` version 2.0.0 → 2.0.1.
+
 ## [2.0.0] — 2026-11-04 — Три репо на GitHub / Three repos on GitHub
 
 ### Для человека

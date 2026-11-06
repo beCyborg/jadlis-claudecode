@@ -7,12 +7,12 @@
 `tld` и вкладка, которая открывается сразу в рабочей папке.
 
 ```
-claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git
+claude plugin marketplace add https://github.com/beCyborg/jadlis-claudecode.git
 claude plugin install jadlis-claudecode@jadlis-claudecode
 ```
 
-`CLAUDE.md` и стили ответа живут в своих репо — [jadlis-claude-md](https://github.com/becyb-org/jadlis-claude-md)
-и [jadlis-output-styles](https://github.com/becyb-org/jadlis-output-styles). `/claudecode` ставит их
+`CLAUDE.md` и стили ответа живут в своих репо — [jadlis-claude-md](https://github.com/beCyborg/jadlis-claude-md)
+и [jadlis-output-styles](https://github.com/beCyborg/jadlis-output-styles). `/claudecode` ставит их
 отдельным шагом, если ты согласишься.
 
 Это первый и обязательный шаг маршрута Jadlis: остальные плагины исходят из того, что
@@ -61,8 +61,8 @@ claude plugin install jadlis-claudecode@jadlis-claudecode
 4. **Папка.** `~/Jadlis/Система/Планы`, `~/Jadlis/.claude/rules` и заметка о том, как
    тут принято работать: план → проверка → реализация.
 5. **Инструкции и стили — по желанию.** Скилл спрашивает, клонирует
-   [jadlis-claude-md](https://github.com/becyb-org/jadlis-claude-md) и
-   [jadlis-output-styles](https://github.com/becyb-org/jadlis-output-styles) во временную папку
+   [jadlis-claude-md](https://github.com/beCyborg/jadlis-claude-md) и
+   [jadlis-output-styles](https://github.com/beCyborg/jadlis-output-styles) во временную папку
    и запускает их `install.sh --plan`, потом `install.sh`. Свой `CLAUDE.md` без «да» не заменяется.
 6. **`~/.claude` один в один.** Слияние `settings.json`, четыре хука, `statusline-command.sh`,
    служебные скрипты, автоподтверждение computer use и переход в bypass после одобрения
@@ -113,7 +113,7 @@ claude plugin install jadlis-claudecode@jadlis-claudecode
 Ты — установщик. Поставь на этот Mac плагин jadlis-claudecode с GitHub.
 Ключей этому плагину не нужно, ничего секретного спрашивать не надо.
 Выполни ровно эти команды, дословно, ничего не сокращая:
-1. claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git
+1. claude plugin marketplace add https://github.com/beCyborg/jadlis-claudecode.git
 2. claude plugin install jadlis-claudecode@jadlis-claudecode
 3. claude plugin list — покажи мне строку про jadlis-claudecode и его версию.
 Потом скажи мне одной строкой: набери /claudecode.
@@ -125,7 +125,7 @@ claude plugin install jadlis-claudecode@jadlis-claudecode
 **б) Команды руками.**
 
 ```
-claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git
+claude plugin marketplace add https://github.com/beCyborg/jadlis-claudecode.git
 claude plugin install jadlis-claudecode@jadlis-claudecode
 claude plugin list
 ```
@@ -134,7 +134,7 @@ claude plugin list
 снимается она одной строкой: `claude plugin uninstall jadlis-claudecode@jadlis-claudecode --keep-data`.
 
 Через общий маркетплейс Jadlis ставится тот же плагин:
-`claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git`, затем
+`claude plugin marketplace add https://github.com/beCyborg/jadlis-hub.git`, затем
 `claude plugin install jadlis-claudecode@jadlis`. Ставь одним из двух способов, не обоими.
 Полный HTTPS-URL обязателен: короткая форма `owner/repo` клонируется по SSH, а SSH-ключа
 у нового пользователя обычно нет.

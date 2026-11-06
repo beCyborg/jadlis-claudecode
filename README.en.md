@@ -7,12 +7,12 @@ English · [Русский](README.md)
 commands and a tab that opens straight in the working folder.
 
 ```
-claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git
+claude plugin marketplace add https://github.com/beCyborg/jadlis-claudecode.git
 claude plugin install jadlis-claudecode@jadlis-claudecode
 ```
 
-`CLAUDE.md` and the answer styles live in their own repos — [jadlis-claude-md](https://github.com/becyb-org/jadlis-claude-md)
-and [jadlis-output-styles](https://github.com/becyb-org/jadlis-output-styles). `/claudecode` installs
+`CLAUDE.md` and the answer styles live in their own repos — [jadlis-claude-md](https://github.com/beCyborg/jadlis-claude-md)
+and [jadlis-output-styles](https://github.com/beCyborg/jadlis-output-styles). `/claudecode` installs
 them as a separate step if you agree.
 
 This is the first and mandatory step of the Jadlis route: every other plugin assumes the
@@ -61,8 +61,8 @@ acts. Before an install and before any overwrite — a question.
 4. **The folder.** `~/Jadlis/Система/Планы`, `~/Jadlis/.claude/rules` and a note on how
    work is done here: plan → verification → implementation.
 5. **Instructions and styles — optional.** The skill asks, clones
-   [jadlis-claude-md](https://github.com/becyb-org/jadlis-claude-md) and
-   [jadlis-output-styles](https://github.com/becyb-org/jadlis-output-styles) into a temporary folder
+   [jadlis-claude-md](https://github.com/beCyborg/jadlis-claude-md) and
+   [jadlis-output-styles](https://github.com/beCyborg/jadlis-output-styles) into a temporary folder
    and runs their `install.sh --plan`, then `install.sh`. Your own `CLAUDE.md` is not replaced without a "yes".
 6. **`~/.claude` one to one.** The `settings.json` merge, four hooks, `statusline-command.sh`,
    helper scripts, computer-use auto-approve and the switch to bypass after a plan is
@@ -112,7 +112,7 @@ setup. With both installed, the hook fires twice: `claude plugin uninstall jadli
 You are the installer. Install the plugin jadlis-claudecode from GitHub on this Mac.
 This plugin needs no keys, so ask me for nothing secret.
 Run exactly these commands, verbatim, shortening nothing:
-1. claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git
+1. claude plugin marketplace add https://github.com/beCyborg/jadlis-claudecode.git
 2. claude plugin install jadlis-claudecode@jadlis-claudecode
 3. claude plugin list — show me the line about jadlis-claudecode and its version.
 After that tell me in one line: type /claudecode.
@@ -124,7 +124,7 @@ If a command returns an error, stop, show me the output, and do not move to the 
 **b) Commands by hand.**
 
 ```
-claude plugin marketplace add https://github.com/becyb-org/jadlis-claudecode.git
+claude plugin marketplace add https://github.com/beCyborg/jadlis-claudecode.git
 claude plugin install jadlis-claudecode@jadlis-claudecode
 claude plugin list
 ```
@@ -134,7 +134,7 @@ installs, and one line removes it:
 `claude plugin uninstall jadlis-claudecode@jadlis-claudecode --keep-data`.
 
 The shared Jadlis marketplace installs the same plugin:
-`claude plugin marketplace add https://gitlab.com/beCyborg/jadlis-hub.git`, then
+`claude plugin marketplace add https://github.com/beCyborg/jadlis-hub.git`, then
 `claude plugin install jadlis-claudecode@jadlis`. Use one of the two ways, not both. The full HTTPS URL is
 required: the short `owner/repo` form clones over SSH, and a new user usually has no SSH key.
 
